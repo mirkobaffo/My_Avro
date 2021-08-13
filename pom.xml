@@ -33,7 +33,7 @@
   <name>Apache Avro Toplevel</name>
   <url>https://avro.apache.org</url>
   <description>Avro toplevel pom</description>
-
+  <!-- commento -->
   <!-- This project is used for top level build tasks and artifact copying.
        The RAT task is run to validate licenses.  The Enforcer plugin is used
        to validate that java projects are the correct version.
