@@ -2,28 +2,20 @@
 *****************************************************
 Summary
 -------
-Generated at: 2021-08-22T15:16:33+02:00
+Generated at: 2021-08-22T15:59:35+02:00
 
 Notes: 44
 Binaries: 4
 Archives: 0
 Standards: 1095
 
-Apache Licensed: 1091
+Apache Licensed: 1092
 Generated Documents: 0
 
 JavaDocs are generated, thus a license header is optional.
 Generated files do not require license headers.
 
-1 Unknown Licenses
-
-*****************************************************
-
-Files with unapproved licenses:
-
-  lang/java/mapred/src/test/java/org/apache/avro/mapred/TestAvroWrapper.java
-
-*****************************************************
+0 Unknown Licenses
 
 *****************************************************
   Files with Apache License headers will be marked AL
@@ -341,7 +333,7 @@ Files with unapproved licenses:
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/TetherTaskRunner.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/WordCountTask.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/TetherTask.java
- !????? lang/java/mapred/src/test/java/org/apache/avro/mapred/TestAvroWrapper.java
+  AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/TestAvroWrapper.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapreduce/AvroFiles.java
   N     lang/java/mapred/src/main/resources/META-INF/NOTICE
   AL    lang/java/mapred/src/main/java/org/apache/avro/mapred/AvroKeyComparator.java
@@ -1175,58 +1167,3 @@ Files with unapproved licenses:
   AL    share/githooks/commit-msg
  
 *****************************************************
-
- Printing headers for text files without a valid license header...
- 
-=====================================================
-== File: lang/java/mapred/src/test/java/org/apache/avro/mapred/TestAvroWrapper.java
-=====================================================
-package org.apache.avro.mapred;
-
-import static org.junit.Assert.*;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters
-
-import org.junit.Test;
-
-
-@RunWith(Parameterized.class)
-public class TestAvroWrapper {
-	private String datumString;
-	private int datumInt.
-
-	
-	
-	@Parameters 
-    public static Collection<Object[]> configure() throws Exception{
-        return Arrays.asList(new Object[][]{
-            {"mirko", 8}, {"guglielmo" , 99999}
-        });
-    }
-    
-    public TestAvroWrapper(datumInt, datumString) {
-    	this.datumInt = datumInt;
-    	this.datumString = datumString;
-    }
-    
-    @Test
-    public void testWrap() {
-    	//creiamo 3 istanze diverse del wrapper che prendono 3 attributi diversi
-    	AvroWrapper aWN = new AvroWrapper();
-    	AvroWrapper <String> aWS = new AvroWrapper(datumString);
-    	AvroWrapper <int> aWI = new AvroWrapper(datumInt);
-    	assertEquals(null, aWN.datum());
-    	assertEquals(datumString, aWS.datum());
-    	assertEquals(datumInt, aWI.datum());
-    	aWN.datum(datumString);
-    	assertEquals(datumString, aWN.datum());
-
-    }
-
-	//Ora cerchiamo di andare a testare il metodo che restituisce un JSON
-    @Test
-    public void testToString() {
-    	AvroWrapper<String> wrapper = new AvroWrapper<>(datumString);
-    	assertEquals(datumString, wrapper.toString());
-    }
-}
