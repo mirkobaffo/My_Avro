@@ -22,7 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import jdk.jfr.Timestamp;
@@ -38,59 +37,47 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import org.apache.bookkeeper.bookie.Journal.LastLogMark;
-import org.apache.bookkeeper.bookie.Journal;
-import org.apache.bookkeeper.client.ClientUtil;
-import org.apache.bookkeeper.client.LedgerHandle;
-import org.apache.bookkeeper.conf.TestBKConfiguration;
-import org.apache.bookkeeper.conf.ServerConfiguration;
-import org.apache.bookkeeper.bookie.LedgerDirsManager;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.File;
-import org.apache.bookkeeper.util.IOUtils;
-import org.apache.commons.io.FileUtils;
-
 
 
 @RunWith(Parameterized.class)
 public class TestAvroWrapper {
+	
+	String datumString;
+	Integer datumInt;
 
 	@Parameters 
     public static Collection<Object[]> configure() throws Exception{
         return Arrays.asList(new Object[][]{
             {"mirko", 8}, {"guglielmo", 99999}
         });
-    }
+    } 
     
-    private String datumString;
-	private int datumInt;
+   
     
-    public TestAvroWrapper(datumInt, datumString) {
+    public TestAvroWrapper(String datumString, Integer datumInt) {
     	this.datumInt = datumInt;
-    	this.datumString = datumString;
-    }
+    	this.datumString = datumString; 
+    } 
     
     @Test
-    public void testWrap() {
-    	creiamo 3 istanze diverse del wrapper che prendono 3 attributi diversi
+    public void testWrap() throws Exception {
+    	//creiamo 3 istanze diverse del wrapper che prendono 3 attributi diversi
     	AvroWrapper <String> aWN = new AvroWrapper();
     	AvroWrapper <String> aWS = new AvroWrapper(datumString);
-    	AvroWrapper <int> aWI = new AvroWrapper(datumInt);
+    	AvroWrapper <Integer> aWI = new AvroWrapper(datumInt);
     	assertEquals(null, aWN.datum());
     	assertEquals(datumString, aWS.datum());
     	assertEquals(datumInt, aWI.datum());
     	aWN.datum(datumString);
-    	assertEquals(datumString, aWN.datum());
+    	assertEquals(datumString, aWN.datum()); 
 
     }
 
 	//Ora cerchiamo di andare a testare il metodo che restituisce un JSON
     @Test
-    public void testToString() {
-    	AvroWrapper<String> wrapper = new AvroWrapper<>(datumString);
-    	assertEquals(datumString, wrapper.toString());
+    public void testForJSON() throws Exception {
+    	AvroWrapper<String> wrapperString = new AvroWrapper (datumString);
+    	assertEquals(datumString, wrapperString.toString());
     }
 }

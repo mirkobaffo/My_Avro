@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro
-Bnd-LastModified: 1629640787601
+Bnd-LastModified: 1629652140771
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro core components

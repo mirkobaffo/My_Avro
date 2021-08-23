@@ -1,0 +1,10 @@
+org/apache/avro/grpc/test/TestError$Builder.class
+org/apache/avro/grpc/test/Kind.class
+org/apache/avro/grpc/test/TestRecord.class
+org/apache/avro/grpc/test/TestService.class
+org/apache/avro/grpc/test/TestRecord$1.class
+org/apache/avro/grpc/test/TestError.class
+org/apache/avro/grpc/test/TestService$Callback.class
+org/apache/avro/grpc/test/TestError$1.class
+org/apache/avro/grpc/test/MD5.class
+org/apache/avro/grpc/test/TestRecord$Builder.class

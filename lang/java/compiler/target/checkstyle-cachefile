@@ -1,8 +1,8 @@
-#Sun Aug 22 15:59:51 CEST 2021
-/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/ResolvingVisitor.java=1628525413566
-/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitor.java=1628525413566
-/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/JavaCharStream.java=1629638564990
+#Sun Aug 22 19:09:04 CEST 2021
 /Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/Token.java=1629638564991
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/JavaCharStream.java=1629638564990
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitor.java=1628525413566
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/ResolvingVisitor.java=1628525413566
 configuration*?=CA58B5DD3B6518FDEE2B9F17A555C0942244A222
 /Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/IdlConstants.java=1629638564991
 /Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/SpecificCompiler.java=1628525413567

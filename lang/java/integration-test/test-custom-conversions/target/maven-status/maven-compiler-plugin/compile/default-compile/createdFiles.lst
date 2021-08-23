@@ -1,0 +1,6 @@
+org/apache/avro/codegentest/FixedSizeString.class
+org/apache/avro/codegentest/CustomDecimal.class
+org/apache/avro/codegentest/FixedSizeStringLogicalType.class
+org/apache/avro/codegentest/FixedSizeStringConversion.class
+org/apache/avro/codegentest/FixedSizeStringFactory.class
+org/apache/avro/codegentest/CustomDecimalConversion.class
