@@ -87,6 +87,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
           <!-- some IPC tests hang if not run in a separate JVM -->
           <configuration>
+            <systemPropertyVariables>
+              <jacoco-agent.destfile>$/jacoco.exec</jacoco-agent.destfile>
+            </systemPropertyVariables>
             <reuseForks>false</reuseForks>
             <useUnlimitedThreads>true</useUnlimitedThreads>
           </configuration>
@@ -136,7 +139,7 @@
       <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.7.6.201602180812</version>
+    <version>0.8.5</version>
     <executions>
         <execution>
             <id>jacoco-initialize</id>
