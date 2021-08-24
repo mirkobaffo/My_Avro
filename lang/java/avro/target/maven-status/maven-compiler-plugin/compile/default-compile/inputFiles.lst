@@ -143,6 +143,5 @@
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaParseException.java
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificRecordBase.java
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaValidatorBuilder.java
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccessUnsafe.java
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroAliases.java
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ValidatingEncoder.java

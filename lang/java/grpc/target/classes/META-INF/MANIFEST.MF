@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.grpc
-Bnd-LastModified: 1629652173907
+Bnd-LastModified: 1629729358348
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro IDL based RPC and serialization over gRPC
@@ -24,7 +24,6 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  SNAPSHOT",org.apache.avro.ipc;version="1.11.0.SNAPSHOT",org.apache.avro
  .specific;version="1.11.0.SNAPSHOT",org.apache.avro.util;version="1.11.
  0.SNAPSHOT",io.grpc,io.grpc.stub
-Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro gRPC
 Specification-Vendor: The Apache Software Foundation

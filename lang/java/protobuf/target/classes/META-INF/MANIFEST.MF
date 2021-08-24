@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.protobuf
-Bnd-LastModified: 1629652171003
+Bnd-LastModified: 1629729349868
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Permit serialization of Protobuf-generated classes a
@@ -29,7 +29,6 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  .fasterxml.jackson.core;version="[2.12,3)",com.fasterxml.jackson.databi
  nd;version="[2.12,3)",com.fasterxml.jackson.databind.node;version="[2.1
  2,3)"
-Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro Protobuf Compatibility
 Specification-Vendor: The Apache Software Foundation

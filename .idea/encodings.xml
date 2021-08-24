@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/lang/java/archetypes/avro-service-archetype/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/avro/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/compiler/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/compiler/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/compiler/src/main/velocity" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/grpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/integration-test/test-custom-conversions/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/ipc-jetty/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/ipc-netty/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/ipc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/ipc/src/main/velocity" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/mapred/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/mapred/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/maven-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/maven-plugin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/perf/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/protobuf/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/thrift/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/tools/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/tools/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/trevni/avro/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lang/java/trevni/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/share" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/share/schemas" charset="UTF-8" />
+  </component>
+</project>

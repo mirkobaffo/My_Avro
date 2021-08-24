@@ -18,6 +18,34 @@ From: 'FasterXML' (http://fasterxml.com/)
   - jackson-databind (http://github.com/FasterXML/jackson) com.fasterxml.jackson.core:jackson-databind:bundle:2.12.4
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+From: 'JBoss by Red Hat' (http://www.jboss.org)
+  - Arquillian Config API (http://arquillian.org/arquillian-build/arquillian-config-api) org.jboss.arquillian.config:arquillian-config-api:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Config Implementation Base (http://arquillian.org/arquillian-build/arquillian-config-impl-base) org.jboss.arquillian.config:arquillian-config-impl-base:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Config SPI (http://arquillian.org/arquillian-build/arquillian-config-spi) org.jboss.arquillian.config:arquillian-config-spi:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Core API (http://arquillian.org/arquillian-build/arquillian-core-api) org.jboss.arquillian.core:arquillian-core-api:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Core Implementation Base (http://arquillian.org/arquillian-build/arquillian-core-impl-base) org.jboss.arquillian.core:arquillian-core-impl-base:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Core SPI (http://arquillian.org/arquillian-build/arquillian-core-spi) org.jboss.arquillian.core:arquillian-core-spi:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian TestRunner JUnit Core (http://arquillian.org/arquillian-build/arquillian-junit-core) org.jboss.arquillian.junit:arquillian-junit-core:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian TestRunner JUnit Standalone (http://arquillian.org/arquillian-build/arquillian-junit-standalone) org.jboss.arquillian.junit:arquillian-junit-standalone:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Test API (http://arquillian.org/arquillian-build/arquillian-test-api) org.jboss.arquillian.test:arquillian-test-api:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Test Implementation Base (http://arquillian.org/arquillian-build/arquillian-test-impl-base) org.jboss.arquillian.test:arquillian-test-impl-base:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Arquillian Test SPI (http://arquillian.org/arquillian-build/arquillian-test-spi) org.jboss.arquillian.test:arquillian-test-spi:jar:1.6.0.Final
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - ShrinkWrap Descriptors API Base (http://www.jboss.org/shrinkwrap-descriptors-api-base) org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:jar:2.0.0
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - ShrinkWrap Descriptors SPI (http://www.jboss.org/shrinkwrap-descriptors-spi) org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:jar:2.0.0
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 From: 'QOS.ch' (http://www.qos.ch)
   - SLF4J API Module (http://www.slf4j.org) org.slf4j:slf4j-api:jar:1.7.32
     License: MIT License  (http://www.opensource.org/licenses/mit-license.php)

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.ipc
-Bnd-LastModified: 1629652154299
+Bnd-LastModified: 1629729310990
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro inter-process communication components
@@ -45,7 +45,6 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  rg.apache.velocity.app;resolution:=optional;version="[2.3,3)",org.apach
  e.velocity.context;resolution:=optional;version="[2.3,3)",javax.securit
  y.auth.callback,javax.security.sasl,org.slf4j;version="[1.7,2)"
-Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro IPC
 Specification-Vendor: The Apache Software Foundation

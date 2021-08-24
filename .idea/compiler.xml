@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/lang/java/archetypes/avro-service-archetype/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="trevni-core" />
+        <module name="avro-thrift" />
+        <module name="avro-grpc" />
+        <module name="avro-service-archetype" />
+        <module name="avro-ipc" />
+        <module name="avro-protobuf" />
+        <module name="avro-mapred" />
+        <module name="avro-perf" />
+        <module name="avro-ipc-netty" />
+        <module name="avro-codegen-test" />
+        <module name="trevni-avro" />
+        <module name="avro-maven-plugin" />
+        <module name="avro-compiler" />
+        <module name="avro-tools" />
+        <module name="avro-test-custom-conversions" />
+        <module name="avro-ipc-jetty" />
+        <module name="avro" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="avro" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-codegen-test" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-compiler" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-grpc" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-ipc" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-ipc-jetty" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-ipc-netty" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-mapred" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-maven-plugin" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-perf" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-protobuf" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-test-custom-conversions" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-thrift" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="avro-tools" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="trevni-avro" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+      <module name="trevni-core" options="-parameters -Xlint:all -Xlint:-options -Xlint:-rawtypes -Xlint:-serial -Xlint:-unchecked" />
+    </option>
+  </component>
+</project>

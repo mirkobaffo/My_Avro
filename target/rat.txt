@@ -2,14 +2,14 @@
 *****************************************************
 Summary
 -------
-Generated at: 2021-08-22T19:08:55+02:00
+Generated at: 2021-08-23T16:52:22+02:00
 
-Notes: 44
-Binaries: 4
+Notes: 45
+Binaries: 121
 Archives: 0
-Standards: 1095
+Standards: 1097
 
-Apache Licensed: 1092
+Apache Licensed: 1094
 Generated Documents: 0
 
 JavaDocs are generated, thus a license header is optional.
@@ -328,6 +328,127 @@ Generated files do not require license headers.
   AL    lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/IDLProtocolMojo.java
   AL    lang/java/eclipse-java-formatter.xml
   AL    lang/java/pom.xml
+  AL    lang/java/mapred/bin/pom.xml
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTask$Buffer.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/WordCountTask.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTask.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTask$Collector.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTaskRunner.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/WordCountUtil.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/TestAvroWrapper.class
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapreduce/AvroFiles.class
+  N     lang/java/mapred/bin/src/main/resources/META-INF/NOTICE
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroMapper.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/DelegatingInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopMapper.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroWrapper.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroValue.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopReducerBase.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroReducer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/Pair.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopCombiner.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/SequenceFileReader$WritableData.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopReducer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroMultipleInputs.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/SequenceFileInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroMultipleOutputs$InternalFileOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroUtf8InputFormat$Utf8LineRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroUtf8InputFormat.class
+  AL    lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/package.html
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/SequenceFileRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroSerialization.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherData.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherKeySerialization.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetheredProcess.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherReducer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherPartitioner.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherKeySerialization$TetherDataSerializer.class
+  AL    lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/package.html
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherMapRunner.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetheredProcess$Protocol.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherKeySerialization$TetherDataDeserializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherKeyComparator.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherJob.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/tether/TetherOutputService.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroTextOutputFormat$AvroTextRecordWriter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/MapCollector.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroKeyComparator.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroTextOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/DelegatingMapper.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroAsTextInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroMultipleOutputs$RecordWriterWithCounter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/SequenceFileReader$Converter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroSerialization$AvroWrapperSerializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroCollector.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopCombiner$PairCollector.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroMultipleOutputs.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroKey.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopReducer$ReduceCollector.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroJob.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/SequenceFileReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroSerialization$AvroWrapperDeserializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/AvroAsTextRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/FsInput.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/HadoopReducerBase$ReduceIterable.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapred/TaggedInputSplit.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/util/AvroCharSequenceComparator.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/SortedKeyValueFile$Reader$Options.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/SortedKeyValueFile$Writer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/SortedKeyValueFile.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/HadoopCodecFactory.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/SortedKeyValueFile$Writer$Options.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/file/SortedKeyValueFile$Reader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSequenceFile$Reader$Options.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSequenceFile$Reader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$AvroWrapperConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$BooleanWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$FloatWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroValueDeserializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$TextConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSequenceFile.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$IntWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$DoubleWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSerialization.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroKeyValue$Iterator.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSequenceFile$Writer$Options.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroKeyComparator.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$ByteWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSerializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$BytesWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$NullWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroKeyDeserializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDeserializer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroDatumConverterFactory$LongWritableConverter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroSequenceFile$Writer.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/hadoop/io/AvroKeyValue.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroRecordReaderBase.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroSequenceFileOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyValueInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyOutputFormat$RecordWriterFactory.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroSequenceFileInputFormat$AvroSequenceFileRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyValueRecordWriter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyValueOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyOutputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyValueRecordReader.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroMultipleOutputs$RecordWriterWithCounter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyRecordWriter.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroKeyInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroOutputFormatBase.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroMultipleOutputs.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroSequenceFileInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/CombineAvroKeyValueFileInputFormat.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/AvroJob.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/CombineAvroKeyValueFileInputFormat$AvroKeyValueFileRecordReaderWrapper.class
+  B     lang/java/mapred/bin/src/main/java/org/apache/avro/mapreduce/Syncable.class
   AL    lang/java/mapred/pom.xml
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/WordCountUtil.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/TetherTaskRunner.java
@@ -501,7 +622,6 @@ Generated files do not require license headers.
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccess.java
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/package.html
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/AvroAlias.java
-  AL    lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccessUnsafe.java
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/Stringable.java
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/AvroName.java
   AL    lang/java/avro/src/main/java/org/apache/avro/reflect/ReflectData.java

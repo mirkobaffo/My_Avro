@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/thrift/src/main/java/org/apache/avro/thrift/ThriftData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/thrift/src/main/java/org/apache/avro/thrift/ThriftDatumReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/thrift/src/main/java/org/apache/avro/thrift/ThriftDatumWriter.java">
+</file>
 </checkstyle>

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.compiler
-Bnd-LastModified: 1629652142631
+Bnd-LastModified: 1629729296754
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Compilers for Avro IDL and Avro Specific Java API
@@ -33,7 +33,6 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  .ant,org.apache.tools.ant.types,org.apache.velocity;version="[2.3,3)",o
  rg.apache.velocity.app;version="[2.3,3)",org.apache.velocity.context;ve
  rsion="[2.3,3)",org.slf4j;version="[1.7,2)"
-Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro Compiler
 Specification-Vendor: The Apache Software Foundation

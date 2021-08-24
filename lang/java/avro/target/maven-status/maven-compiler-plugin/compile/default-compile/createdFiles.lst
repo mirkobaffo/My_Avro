@@ -54,7 +54,6 @@ org/apache/avro/data/TimeConversions$TimestampMillisConversion.class
 org/apache/avro/specific/SpecificData$5.class
 org/apache/avro/file/SnappyCodec$Option.class
 org/apache/avro/Schema$BytesSchema.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeLongField.class
 org/apache/avro/Schema.class
 org/apache/avro/io/parsing/JsonGrammarGenerator.class
 org/apache/avro/Schema$RecordSchema.class
@@ -71,7 +70,6 @@ org/apache/avro/io/BinaryDecoder$BufferAccessor.class
 org/apache/avro/data/Json$ObjectReader.class
 org/apache/avro/LogicalTypes$LocalTimestampMillis.class
 org/apache/avro/specific/AvroGenerated.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeFloatField.class
 org/apache/avro/io/FastReaderBuilder$ReusingFieldReader.class
 org/apache/avro/io/JsonDecoder.class
 org/apache/avro/file/DataFileWriter$BufferedFileOutputStream$PositionFilter.class
@@ -194,7 +192,6 @@ org/apache/avro/SchemaBuilder$SchemaCompletion.class
 org/apache/avro/util/internal/Accessor$JsonPropertiesAccessor.class
 org/apache/avro/io/parsing/ResolvingGrammarGenerator.class
 org/apache/avro/io/parsing/Symbol$ResolvingAction.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeCustomEncodedField.class
 org/apache/avro/file/ZstandardCodec$Option.class
 org/apache/avro/Conversion.class
 org/apache/avro/SchemaBuilder$PrimitiveBuilder.class
@@ -203,7 +200,6 @@ org/apache/avro/SchemaCompatibility$SchemaCompatibilityType.class
 org/apache/avro/reflect/AvroMeta.class
 org/apache/avro/message/RawMessageEncoder$BufferOutputStream.class
 org/apache/avro/specific/ExternalizableOutput.class
-org/apache/avro/reflect/FieldAccessUnsafe.class
 org/apache/avro/SchemaBuilder$FieldTypeBuilder.class
 org/apache/avro/generic/GenericData$Array$1.class
 org/apache/avro/io/JsonDecoder$1.class
@@ -241,7 +237,6 @@ org/apache/avro/JsonProperties$Null.class
 org/apache/avro/Resolver$Action$Type.class
 org/apache/avro/io/parsing/Symbol$IntCheckAction.class
 org/apache/avro/generic/GenericData$Fixed.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeCachedField.class
 org/apache/avro/data/Json$ObjectWriter.class
 org/apache/avro/SchemaValidator.class
 org/apache/avro/message/MessageDecoder.class
@@ -254,13 +249,11 @@ org/apache/avro/message/BinaryMessageEncoder$V1MessageEncoder.class
 org/apache/avro/specific/SpecificErrorBuilderBase.class
 org/apache/avro/specific/SpecificData$4.class
 org/apache/avro/Conversions$DecimalConversion.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeDoubleField.class
 org/apache/avro/io/Encoder.class
 org/apache/avro/file/Codec.class
 org/apache/avro/reflect/ReflectDatumReader.class
 org/apache/avro/Protocol.class
 org/apache/avro/io/DirectBinaryDecoder$ByteReader.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeIntField.class
 org/apache/avro/io/ValidatingDecoder.class
 org/apache/avro/io/parsing/Parser.class
 org/apache/avro/SchemaBuilder$FixedDefault.class
@@ -311,7 +304,6 @@ org/apache/avro/io/BinaryDecoder.class
 org/apache/avro/io/parsing/ValidatingGrammarGenerator$1.class
 org/apache/avro/LogicalTypes$TimeMillis.class
 org/apache/avro/SchemaBuilder$EnumBuilder.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeObjectField.class
 org/apache/avro/generic/GenericDatumReader.class
 org/apache/avro/io/parsing/Symbol$EnumAdjustAction.class
 org/apache/avro/io/parsing/Symbol$EnumLabelsAction.class
@@ -322,7 +314,6 @@ org/apache/avro/message/SchemaStore$Cache.class
 org/apache/avro/reflect/ReflectData$ClassAccessorData.class
 org/apache/avro/util/WeakIdentityHashMap$1.class
 org/apache/avro/file/SeekableFileInput.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeCharField.class
 org/apache/avro/SchemaBuilder$UnionFieldTypeBuilder.class
 org/apache/avro/io/BinaryDecoder$ByteArrayByteSource.class
 org/apache/avro/Schema$DoubleSchema.class
@@ -358,11 +349,9 @@ org/apache/avro/io/DecoderFactory$1.class
 org/apache/avro/util/ReusableByteArrayInputStream.class
 org/apache/avro/SchemaBuilder$BytesBuilder.class
 org/apache/avro/io/BufferedBinaryEncoder$OutputStreamSink.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeShortField.class
 org/apache/avro/SchemaBuilder$ArrayDefault.class
 org/apache/avro/SchemaNormalization.class
 org/apache/avro/util/internal/Accessor$ResolvingGrammarGeneratorAccessor.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeByteField.class
 org/apache/avro/io/JsonDecoder$ReorderBuffer.class
 org/apache/avro/SchemaBuilder$NamespacedBuilder.class
 org/apache/avro/SchemaBuilder$BaseTypeBuilder.class
@@ -375,7 +364,6 @@ org/apache/avro/file/BZip2Codec$Option.class
 org/apache/avro/file/NullCodec.class
 org/apache/avro/data/TimeConversions$DateConversion.class
 org/apache/avro/SchemaBuilder$NamedBuilder.class
-org/apache/avro/reflect/FieldAccessUnsafe$UnsafeBooleanField.class
 org/apache/avro/io/FastReaderBuilder$RecordReader$Stage.class
 org/apache/avro/Protocol$TwoWayMessage.class
 org/apache/avro/specific/SpecificDatumReader$1.class

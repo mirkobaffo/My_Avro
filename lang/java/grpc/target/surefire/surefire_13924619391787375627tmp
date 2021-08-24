@@ -1,0 +1,7 @@
+#surefire_1
+#Mon Aug 23 16:35:57 CEST 2021
+basedir=/Users/mirko/git/My_Avro/lang/java/grpc
+java.security.krb5.kdc=kdc0.ox.ac.uk\:kdc1.ox.ac.uk
+user.dir=/Users/mirko/git/My_Avro/lang/java/grpc
+java.security.krb5.realm=OX.AC.UK
+localRepository=/Users/mirko/.m2/repository

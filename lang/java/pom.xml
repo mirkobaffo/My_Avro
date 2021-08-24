@@ -109,6 +109,26 @@
           </dependencies>
         </plugin>
         <plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.7.6.201602180812</version>
+    <executions>
+        <execution>
+            <id>jacoco-initialize</id>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+        </execution>
+        <execution>
+            <id>jacoco-site</id>
+            <phase>package</phase>
+            <goals>
+                <goal>report</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
@@ -154,35 +174,8 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <includes>
-              <!-- Avro naming convention for JUnit tests -->
-              <include>**/Test**</include>
-            </includes>
-            <excludes>
-              <!-- A few innner classes are not to be tested -->
-              <exclude>**/*$*</exclude>
-              <!-- exclude the generated classes under apache.avro.test, some of
-                these match **/Test** and are not JUnit tests -->
-              <exclude>**/apache/avro/test/**</exclude>
-            </excludes>
-            <enableAssertions>false</enableAssertions>
-            <trimStackTrace>false</trimStackTrace>
-            <runOrder>random</runOrder>
-            <parallel>all</parallel>
-            <useUnlimitedThreads>true</useUnlimitedThreads>
-            <!--<perCoreThreadCount>true</perCoreThreadCount>-->
-
-            <!-- TestSpecificCompiler instantiates a Java compiler to test output results,
-                 this does not work with a manifest-only-jar to set the classpath for the javac.
-                 This may cause problems on some platforms.
-                 See https://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html
-                 for more information. -->
-            <useManifestOnlyJar>false</useManifestOnlyJar>
-            <!-- configures unit test standard error and standard out to go to a file per test
-                 rather than the console. -->
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-            <failIfNoTests>false</failIfNoTests>
-            <argLine>-Xmx1000m</argLine>
+              <reuseForks>false</reuseForks>
+              <useUnlimitedThreads>true</useUnlimitedThreads>
           </configuration>
         </plugin>
         <plugin>

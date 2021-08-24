@@ -1,3 +1,297 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Conversion.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/UnresolvedUnionException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateMutualRead.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/FixedSize.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificErrorBuilderBase.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/ExternalizableOutput.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/AvroGenerated.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificFixed.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/ExternalizableInput.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificRecord.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificRecordBuilderBase.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificRecordBase.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificDatumReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificDatumWriter.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificExceptionBase.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateCanRead.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaParseException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/AvroMissingFieldException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaCompatibility.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/LogicalType.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/ByteBufferOutputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/WeakIdentityHashMap.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/ClassUtils.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/internal/Accessor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/internal/JacksonUtils.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/ReusableByteBufferInputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/Utf8.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/ReusableByteArrayInputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/RandomData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/util/ByteBufferInputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaValidator.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/UnknownAvroCodecException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Resolver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/ZstandardLoader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/BZip2Codec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SnappyCodec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileReader12.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileWriter.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/FileReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileConstants.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SeekableFileInput.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DeflateCodec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SyncableFileOutputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/ZstandardCodec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/NullCodec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SeekableByteArrayInput.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/Syncable.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/Codec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/CodecFactory.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SeekableInput.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/XZCodec.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Schema.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaValidationStrategy.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Protocol.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaValidationException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateCanBeRead.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/InvalidNumberEncodingException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/ReflectDatumReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/Union.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroAliases.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccessor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroMeta.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/ReflectDatumWriter.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroEncode.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccess.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroAlias.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/Stringable.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroName.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/ReflectData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/DateAsLongEncoding.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/ArrayAccessor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/MapEntry.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroSchema.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/FieldAccessReflect.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroIgnore.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/ReflectionUtil.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroDoc.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/Nullable.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/CustomEncoding.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroDefault.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ResolvingDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BinaryDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BinaryData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BufferedBinaryEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/FastReaderBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/Decoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ValidatingEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/DecoderFactory.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ParsingEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/EncoderFactory.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/JsonDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/DirectBinaryEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BinaryEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BlockingBinaryEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/DatumReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ParsingDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/Parser.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/SkipParser.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/ValidatingGrammarGenerator.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/Symbol.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/JsonGrammarGenerator.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/parsing/ResolvingGrammarGenerator.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ValidatingDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/Encoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/DirectBinaryDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/JsonEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/DatumWriter.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateLatest.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/MessageDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/BinaryMessageEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/MissingSchemaException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/SchemaStore.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/RawMessageEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/BadHeaderException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/MessageEncoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/BinaryMessageDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/RawMessageDecoder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaValidatorBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaBuilderException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/AvroRemoteException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericContainer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericRecord.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericArray.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericRecordBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericFixed.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/IndexedRecord.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericData.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericDatumReader.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericEnumSymbol.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/generic/GenericDatumWriter.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/JsonProperties.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaNormalization.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Conversions.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/InvalidAvroMagicException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/RecordBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/Json.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/TimeConversions.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/ErrorBuilder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/RecordBuilderBase.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/AvroRuntimeException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/AvroTypeException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateAll.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/LogicalTypes.java">
+</file>
 </checkstyle>

@@ -1,3 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroRequestMarshaller.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroGrpcClient.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroInputStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/ServiceDescriptor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroGrpcUtils.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroGrpcServer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/grpc/src/main/java/org/apache/avro/grpc/AvroResponseMarshaller.java">
+</file>
 </checkstyle>
