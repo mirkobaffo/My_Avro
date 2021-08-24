@@ -83,18 +83,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-          <!-- some IPC tests hang if not run in a separate JVM -->
-          <configuration>
-            <systemPropertyVariables>
-              <jacoco-agent.destfile>$/jacoco.exec</jacoco-agent.destfile>
-            </systemPropertyVariables>
-            <reuseForks>false</reuseForks>
-            <useUnlimitedThreads>true</useUnlimitedThreads>
-          </configuration>
-      </plugin>
-      <plugin>
         <groupId>${project.groupId}</groupId>
         <artifactId>avro-maven-plugin</artifactId>
         <version>${project.version}</version>
@@ -137,25 +125,25 @@
         </executions>
       </plugin>
       <plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.5</version>
-    <executions>
-        <execution>
-            <id>jacoco-initialize</id>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.2</version>
+        <executions>
+          <execution>
             <goals>
-                <goal>prepare-agent</goal>
+              <goal>prepare-agent</goal>
             </goals>
-        </execution>
-        <execution>
-            <id>jacoco-site</id>
-            <phase>package</phase>
+          </execution>
+          <!-- attached to Maven test phase -->
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
             <goals>
-                <goal>report</goal>
+              <goal>report</goal>
             </goals>
-        </execution>
-    </executions>
-</plugin>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

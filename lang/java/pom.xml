@@ -109,25 +109,25 @@
           </dependencies>
         </plugin>
         <plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.5</version>
-    <executions>
-        <execution>
-            <id>jacoco-initialize</id>
-            <goals>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.2</version>
+          <executions>
+            <execution>
+              <goals>
                 <goal>prepare-agent</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>jacoco-site</id>
-            <phase>package</phase>
-            <goals>
+              </goals>
+            </execution>
+            <!-- attached to Maven test phase -->
+            <execution>
+              <id>report</id>
+              <phase>test</phase>
+              <goals>
                 <goal>report</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -168,17 +168,6 @@
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
             </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <systemPropertyVariables>
-              <jacoco-agent.destfile>$/jacoco.exec</jacoco-agent.destfile>
-            </systemPropertyVariables>
-              <reuseForks>false</reuseForks>
-              <useUnlimitedThreads>true</useUnlimitedThreads>
           </configuration>
         </plugin>
         <plugin>
@@ -363,24 +352,7 @@
       <id>interop-data-test</id>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <includes>
-                <include>**/DataFileInteropTest*</include>
-              </includes>
-              <excludes>
-              </excludes>
-              <enableAssertions>false</enableAssertions>
-              <forkCount>1</forkCount>
-              <reuseForks>true</reuseForks>
-              <redirectTestOutputToFile>false</redirectTestOutputToFile>
-              <systemPropertyVariables>
-                <test.dir>../../../build/interop/data/</test.dir>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
+
         </plugins>
       </build>
     </profile>
@@ -393,17 +365,6 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <!-- avro-mapred will fail in tests on mac without this -->
-                <java.security.krb5.realm>OX.AC.UK</java.security.krb5.realm>
-                <java.security.krb5.kdc>kdc0.ox.ac.uk:kdc1.ox.ac.uk</java.security.krb5.kdc>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
