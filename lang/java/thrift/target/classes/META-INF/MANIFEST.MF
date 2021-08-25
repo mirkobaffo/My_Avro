@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.thrift
-Bnd-LastModified: 1629729351180
+Bnd-LastModified: 1629812623813
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Permit serialization of Thrift-generated classes as 
@@ -25,6 +25,7 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  SNAPSHOT",org.apache.avro.specific;version="1.11.0.SNAPSHOT",org.apache
  .avro.util;version="1.11.0.SNAPSHOT",org.apache.thrift;version="[0.14,1
  )",org.apache.thrift.meta_data;version="[0.14,1)"
+Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro Thrift Compatibility
 Specification-Vendor: The Apache Software Foundation

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroKeyDeserializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.hadoop.io</a> &gt; <span class="el_source">AvroKeyDeserializer.java</span></div><h1>AvroKeyDeserializer.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.hadoop.io;
+
+import org.apache.avro.Schema;
+import org.apache.avro.io.DatumReader;
+import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroWrapper;
+
+/**
+ * Deserializes AvroKey objects within Hadoop.
+ *
+ * @param &lt;D&gt; The java type of the avro data to deserialize.
+ *
+ * @see AvroDeserializer
+ */
+public class AvroKeyDeserializer&lt;D&gt; extends AvroDeserializer&lt;AvroWrapper&lt;D&gt;, D&gt; {
+  /**
+   * Constructor.
+   *
+   * @param writerSchema The Avro writer schema for the data to deserialize.
+   * @param readerSchema The Avro reader schema for the data to deserialize.
+   */
+  public AvroKeyDeserializer(Schema writerSchema, Schema readerSchema, ClassLoader classLoader) {
+<span class="nc" id="L41">    super(writerSchema, readerSchema, classLoader);</span>
+<span class="nc" id="L42">  }</span>
+
+  /**
+   * Constructor.
+   *
+   * @param writerSchema The Avro writer schema for the data to deserialize.
+   * @param readerSchema The Avro reader schema for the data to deserialize.
+   * @param datumReader  The Avro datum reader to use for deserialization.
+   */
+  public AvroKeyDeserializer(Schema writerSchema, Schema readerSchema, DatumReader&lt;D&gt; datumReader) {
+<span class="nc" id="L52">    super(writerSchema, readerSchema, datumReader);</span>
+<span class="nc" id="L53">  }</span>
+
+  /**
+   * Creates a new empty &lt;code&gt;AvroKey&lt;/code&gt; instance.
+   *
+   * @return a new empty AvroKey.
+   */
+  @Override
+  protected AvroWrapper&lt;D&gt; createAvroWrapper() {
+<span class="nc" id="L62">    return new AvroKey&lt;&gt;(null);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

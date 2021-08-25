@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroGrpcClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro gRPC</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.grpc</a> &gt; <span class="el_source">AvroGrpcClient.java</span></div><h1>AvroGrpcClient.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.avro.grpc;
+
+import org.apache.avro.AvroRemoteException;
+import org.apache.avro.AvroRuntimeException;
+import org.apache.avro.Protocol;
+import org.apache.avro.ipc.CallFuture;
+import org.apache.avro.ipc.Callback;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.MethodDescriptor;
+import io.grpc.stub.ClientCalls;
+import io.grpc.stub.StreamObserver;
+
+/** Component that sets up a gRPC client for Avro's IDL and Serialization. */
+public abstract class AvroGrpcClient {
+
+  private AvroGrpcClient() {
+  }
+
+  /**
+   * Creates a gRPC client for Avro's interface with default {@link CallOptions}.
+   *
+   * @param channel the channel used for gRPC {@link ClientCalls}.
+   * @param iface   Avro interface for which client is built.
+   * @param &lt;T&gt;     type of Avro Interface.
+   * @return a new client proxy.
+   */
+  public static &lt;T&gt; T create(Channel channel, Class&lt;T&gt; iface) {
+<span class="nc" id="L54">    return create(channel, iface, CallOptions.DEFAULT);</span>
+  }
+
+  /**
+   * Creates a gRPC client for Avro's interface with provided {@link CallOptions}.
+   *
+   * @param channel     the channel used for gRPC {@link ClientCalls}.
+   * @param iface       Avro interface for which client is built.
+   * @param callOptions client call options for gRPC.
+   * @param &lt;T&gt;         type of Avro Interface.
+   * @return a new client proxy.
+   */
+  public static &lt;T&gt; T create(Channel channel, Class&lt;T&gt; iface, CallOptions callOptions) {
+<span class="nc" id="L67">    Protocol protocol = AvroGrpcUtils.getProtocol(iface);</span>
+<span class="nc" id="L68">    ServiceDescriptor serviceDescriptor = ServiceDescriptor.create(iface);</span>
+<span class="nc" id="L69">    ServiceInvocationHandler proxyHandler = new ServiceInvocationHandler(channel, callOptions, protocol,</span>
+        serviceDescriptor);
+<span class="nc" id="L71">    return (T) Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, proxyHandler);</span>
+  }
+
+  private static class ServiceInvocationHandler implements InvocationHandler {
+    private final Channel channel;
+    private final CallOptions callOptions;
+    private final ServiceDescriptor serviceDescriptor;
+
+    ServiceInvocationHandler(Channel channel, CallOptions callOptions, Protocol protocol,
+<span class="nc" id="L80">        ServiceDescriptor serviceDescriptor) {</span>
+<span class="nc" id="L81">      this.channel = channel;</span>
+<span class="nc" id="L82">      this.callOptions = callOptions;</span>
+<span class="nc" id="L83">      this.serviceDescriptor = serviceDescriptor;</span>
+<span class="nc" id="L84">    }</span>
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+      try {
+<span class="nc" id="L89">        return invokeUnaryMethod(method, args);</span>
+<span class="nc" id="L90">      } catch (RuntimeException re) {</span>
+        // rethrow any runtime exception
+<span class="nc" id="L92">        throw re;</span>
+<span class="nc" id="L93">      } catch (Exception e) {</span>
+        // throw any of the declared exceptions
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        for (Class&lt;?&gt; exceptionClass : method.getExceptionTypes()) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">          if (exceptionClass.isInstance(e)) {</span>
+<span class="nc" id="L97">            throw e;</span>
+          }
+        }
+        // wrap all other exceptions
+<span class="nc" id="L101">        throw new AvroRemoteException(e);</span>
+      }
+    }
+
+    private Object invokeUnaryMethod(Method method, Object[] args) throws Exception {
+<span class="nc" id="L106">      Type[] parameterTypes = method.getParameterTypes();</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">      if ((parameterTypes.length &gt; 0) &amp;&amp; (parameterTypes[parameterTypes.length - 1] instanceof Class)</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">          &amp;&amp; Callback.class.isAssignableFrom(((Class&lt;?&gt;) parameterTypes[parameterTypes.length - 1]))) {</span>
+        // get the callback argument from the end
+<span class="nc" id="L110">        Object[] finalArgs = Arrays.copyOf(args, args.length - 1);</span>
+<span class="nc" id="L111">        Callback&lt;?&gt; callback = (Callback&lt;?&gt;) args[args.length - 1];</span>
+<span class="nc" id="L112">        unaryRequest(method.getName(), finalArgs, callback);</span>
+<span class="nc" id="L113">        return null;</span>
+      } else {
+<span class="nc" id="L115">        return unaryRequest(method.getName(), args);</span>
+      }
+    }
+
+    private Object unaryRequest(String methodName, Object[] args) throws Exception {
+<span class="nc" id="L120">      CallFuture&lt;Object&gt; callFuture = new CallFuture&lt;&gt;();</span>
+<span class="nc" id="L121">      unaryRequest(methodName, args, callFuture);</span>
+      try {
+<span class="nc" id="L123">        return callFuture.get();</span>
+<span class="nc" id="L124">      } catch (Exception e) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (e.getCause() instanceof Exception) {</span>
+<span class="nc" id="L126">          throw (Exception) e.getCause();</span>
+        }
+<span class="nc" id="L128">        throw new AvroRemoteException(e.getCause());</span>
+      }
+    }
+
+    private &lt;RespT&gt; void unaryRequest(String methodName, Object[] args, Callback&lt;RespT&gt; callback) throws Exception {
+<span class="nc" id="L133">      StreamObserver&lt;Object&gt; observerAdpater = new CallbackToResponseStreamObserverAdpater&lt;&gt;(callback);</span>
+<span class="nc" id="L134">      ClientCalls.asyncUnaryCall(</span>
+<span class="nc" id="L135">          channel.newCall(serviceDescriptor.getMethod(methodName, MethodDescriptor.MethodType.UNARY), callOptions),</span>
+          args, observerAdpater);
+<span class="nc" id="L137">    }</span>
+
+    private static class CallbackToResponseStreamObserverAdpater&lt;T&gt; implements StreamObserver&lt;Object&gt; {
+      private final Callback&lt;T&gt; callback;
+
+<span class="nc" id="L142">      CallbackToResponseStreamObserverAdpater(Callback&lt;T&gt; callback) {</span>
+<span class="nc" id="L143">        this.callback = callback;</span>
+<span class="nc" id="L144">      }</span>
+
+      @Override
+      public void onNext(Object value) {
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (value instanceof Throwable) {</span>
+<span class="nc" id="L149">          callback.handleError((Throwable) value);</span>
+        } else {
+<span class="nc" id="L151">          callback.handleResult((T) value);</span>
+        }
+<span class="nc" id="L153">      }</span>
+
+      @Override
+      public void onError(Throwable t) {
+<span class="nc" id="L157">        callback.handleError(new AvroRuntimeException(t));</span>
+<span class="nc" id="L158">      }</span>
+
+      @Override
+      public void onCompleted() {
+        // do nothing as there is no equivalent in Callback.
+<span class="nc" id="L163">      }</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

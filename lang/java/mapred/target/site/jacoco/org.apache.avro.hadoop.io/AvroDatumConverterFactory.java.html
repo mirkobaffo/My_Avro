@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroDatumConverterFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.hadoop.io</a> &gt; <span class="el_source">AvroDatumConverterFactory.java</span></div><h1>AvroDatumConverterFactory.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.hadoop.io;
+
+import java.nio.ByteBuffer;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericFixed;
+import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroValue;
+import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.mapreduce.AvroJob;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.JobConf;
+
+/**
+ * Constructs converters that turn objects (usually from the output of a MR job)
+ * into Avro data that can be serialized.
+ *
+ * &lt;p&gt;
+ * Currently, only the following types have implemented converters:
+ * &lt;ul&gt;
+ * &lt;li&gt;AvroKey&lt;/li&gt;
+ * &lt;li&gt;AvroValue&lt;/li&gt;
+ * &lt;li&gt;BooleanWritable&lt;/li&gt;
+ * &lt;li&gt;BytesWritable&lt;/li&gt;
+ * &lt;li&gt;ByteWritable&lt;/li&gt;
+ * &lt;li&gt;DoubleWritable&lt;/li&gt;
+ * &lt;li&gt;FloatWritable&lt;/li&gt;
+ * &lt;li&gt;IntWritable&lt;/li&gt;
+ * &lt;li&gt;LongWritable&lt;/li&gt;
+ * &lt;li&gt;NullWritable&lt;/li&gt;
+ * &lt;li&gt;Text&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;/p&gt;
+ */
+public class AvroDatumConverterFactory extends Configured {
+  /**
+   * Creates a new &lt;code&gt;AvroDatumConverterFactory&lt;/code&gt; instance.
+   *
+   * @param conf The job configuration.
+   */
+  public AvroDatumConverterFactory(Configuration conf) {
+<span class="nc" id="L71">    super(conf);</span>
+<span class="nc" id="L72">  }</span>
+
+  /**
+   * Creates a converter that turns objects of type &lt;code&gt;inputClass&lt;/code&gt; into
+   * Avro data.
+   *
+   * @param inputClass The type of input data to convert.
+   * @return A converter that turns objects of type &lt;code&gt;inputClass&lt;/code&gt; into
+   *         Avro data.
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public &lt;IN, OUT&gt; AvroDatumConverter&lt;IN, OUT&gt; create(Class&lt;IN&gt; inputClass) {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    boolean isMapOnly = ((JobConf) getConf()).getNumReduceTasks() == 0;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (AvroKey.class.isAssignableFrom(inputClass)) {</span>
+      Schema schema;
+<span class="nc bnc" id="L87" title="All 2 branches missed.">      if (isMapOnly) {</span>
+<span class="nc" id="L88">        schema = AvroJob.getMapOutputKeySchema(getConf());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (null == schema) {</span>
+<span class="nc" id="L90">          schema = AvroJob.getOutputKeySchema(getConf());</span>
+        }
+      } else {
+<span class="nc" id="L93">        schema = AvroJob.getOutputKeySchema(getConf());</span>
+      }
+<span class="nc bnc" id="L95" title="All 2 branches missed.">      if (null == schema) {</span>
+<span class="nc" id="L96">        throw new IllegalStateException(&quot;Writer schema for output key was not set. Use AvroJob.setOutputKeySchema().&quot;);</span>
+      }
+<span class="nc" id="L98">      return (AvroDatumConverter&lt;IN, OUT&gt;) new AvroWrapperConverter(schema);</span>
+    }
+<span class="nc bnc" id="L100" title="All 2 branches missed.">    if (AvroValue.class.isAssignableFrom(inputClass)) {</span>
+      Schema schema;
+<span class="nc bnc" id="L102" title="All 2 branches missed.">      if (isMapOnly) {</span>
+<span class="nc" id="L103">        schema = AvroJob.getMapOutputValueSchema(getConf());</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (null == schema) {</span>
+<span class="nc" id="L105">          schema = AvroJob.getOutputValueSchema(getConf());</span>
+        }
+      } else {
+<span class="nc" id="L108">        schema = AvroJob.getOutputValueSchema(getConf());</span>
+      }
+<span class="nc bnc" id="L110" title="All 2 branches missed.">      if (null == schema) {</span>
+<span class="nc" id="L111">        throw new IllegalStateException(</span>
+            &quot;Writer schema for output value was not set. Use AvroJob.setOutputValueSchema().&quot;);
+      }
+<span class="nc" id="L114">      return (AvroDatumConverter&lt;IN, OUT&gt;) new AvroWrapperConverter(schema);</span>
+    }
+<span class="nc bnc" id="L116" title="All 2 branches missed.">    if (BooleanWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L117">      return (AvroDatumConverter&lt;IN, OUT&gt;) new BooleanWritableConverter();</span>
+    }
+<span class="nc bnc" id="L119" title="All 2 branches missed.">    if (BytesWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L120">      return (AvroDatumConverter&lt;IN, OUT&gt;) new BytesWritableConverter();</span>
+    }
+<span class="nc bnc" id="L122" title="All 2 branches missed.">    if (ByteWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L123">      return (AvroDatumConverter&lt;IN, OUT&gt;) new ByteWritableConverter();</span>
+    }
+<span class="nc bnc" id="L125" title="All 2 branches missed.">    if (DoubleWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L126">      return (AvroDatumConverter&lt;IN, OUT&gt;) new DoubleWritableConverter();</span>
+    }
+<span class="nc bnc" id="L128" title="All 2 branches missed.">    if (FloatWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L129">      return (AvroDatumConverter&lt;IN, OUT&gt;) new FloatWritableConverter();</span>
+    }
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    if (IntWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L132">      return (AvroDatumConverter&lt;IN, OUT&gt;) new IntWritableConverter();</span>
+    }
+<span class="nc bnc" id="L134" title="All 2 branches missed.">    if (LongWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L135">      return (AvroDatumConverter&lt;IN, OUT&gt;) new LongWritableConverter();</span>
+    }
+<span class="nc bnc" id="L137" title="All 2 branches missed.">    if (NullWritable.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L138">      return (AvroDatumConverter&lt;IN, OUT&gt;) new NullWritableConverter();</span>
+    }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">    if (Text.class.isAssignableFrom(inputClass)) {</span>
+<span class="nc" id="L141">      return (AvroDatumConverter&lt;IN, OUT&gt;) new TextConverter();</span>
+    }
+
+<span class="nc" id="L144">    throw new UnsupportedOperationException(&quot;Unsupported input type: &quot; + inputClass.getName());</span>
+  }
+
+  /** Converts AvroWrappers into their wrapped Avro data. */
+  public static class AvroWrapperConverter extends AvroDatumConverter&lt;AvroWrapper&lt;?&gt;, Object&gt; {
+    private final Schema mSchema;
+
+<span class="nc" id="L151">    public AvroWrapperConverter(Schema schema) {</span>
+<span class="nc" id="L152">      mSchema = schema;</span>
+<span class="nc" id="L153">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Object convert(AvroWrapper&lt;?&gt; input) {
+<span class="nc" id="L158">      return input.datum();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L164">      return mSchema;</span>
+    }
+  }
+
+  /** Converts BooleanWritables into Booleans. */
+  public static class BooleanWritableConverter extends AvroDatumConverter&lt;BooleanWritable, Boolean&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L173">    public BooleanWritableConverter() {</span>
+<span class="nc" id="L174">      mSchema = Schema.create(Schema.Type.BOOLEAN);</span>
+<span class="nc" id="L175">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Boolean convert(BooleanWritable input) {
+<span class="nc" id="L180">      return input.get();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L186">      return mSchema;</span>
+    }
+  }
+
+  /** Converts BytesWritables into ByteBuffers. */
+  public static class BytesWritableConverter extends AvroDatumConverter&lt;BytesWritable, ByteBuffer&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L195">    public BytesWritableConverter() {</span>
+<span class="nc" id="L196">      mSchema = Schema.create(Schema.Type.BYTES);</span>
+<span class="nc" id="L197">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public ByteBuffer convert(BytesWritable input) {
+<span class="nc" id="L202">      return ByteBuffer.wrap(input.getBytes());</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L208">      return mSchema;</span>
+    }
+  }
+
+  /** Converts ByteWritables into GenericFixed of size 1. */
+  public static class ByteWritableConverter extends AvroDatumConverter&lt;ByteWritable, GenericFixed&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L217">    public ByteWritableConverter() {</span>
+<span class="nc" id="L218">      mSchema = Schema.createFixed(&quot;Byte&quot;, &quot;A single byte&quot;, &quot;org.apache.avro.mapreduce&quot;, 1);</span>
+<span class="nc" id="L219">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public GenericFixed convert(ByteWritable input) {
+<span class="nc" id="L224">      return new GenericData.Fixed(mSchema, new byte[] { input.get() });</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L230">      return mSchema;</span>
+    }
+  }
+
+  /** Converts DoubleWritables into Doubles. */
+  public static class DoubleWritableConverter extends AvroDatumConverter&lt;DoubleWritable, Double&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L239">    public DoubleWritableConverter() {</span>
+<span class="nc" id="L240">      mSchema = Schema.create(Schema.Type.DOUBLE);</span>
+<span class="nc" id="L241">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Double convert(DoubleWritable input) {
+<span class="nc" id="L246">      return input.get();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L252">      return mSchema;</span>
+    }
+  }
+
+  /** Converts FloatWritables into Floats. */
+  public static class FloatWritableConverter extends AvroDatumConverter&lt;FloatWritable, Float&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L261">    public FloatWritableConverter() {</span>
+<span class="nc" id="L262">      mSchema = Schema.create(Schema.Type.FLOAT);</span>
+<span class="nc" id="L263">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Float convert(FloatWritable input) {
+<span class="nc" id="L268">      return input.get();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L274">      return mSchema;</span>
+    }
+  }
+
+  /** Converts IntWritables into Ints. */
+  public static class IntWritableConverter extends AvroDatumConverter&lt;IntWritable, Integer&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L283">    public IntWritableConverter() {</span>
+<span class="nc" id="L284">      mSchema = Schema.create(Schema.Type.INT);</span>
+<span class="nc" id="L285">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Integer convert(IntWritable input) {
+<span class="nc" id="L290">      return input.get();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L296">      return mSchema;</span>
+    }
+  }
+
+  /** Converts LongWritables into Longs. */
+  public static class LongWritableConverter extends AvroDatumConverter&lt;LongWritable, Long&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L305">    public LongWritableConverter() {</span>
+<span class="nc" id="L306">      mSchema = Schema.create(Schema.Type.LONG);</span>
+<span class="nc" id="L307">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Long convert(LongWritable input) {
+<span class="nc" id="L312">      return input.get();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L318">      return mSchema;</span>
+    }
+  }
+
+  /** Converts NullWritables into Nulls. */
+  public static class NullWritableConverter extends AvroDatumConverter&lt;NullWritable, Object&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L327">    public NullWritableConverter() {</span>
+<span class="nc" id="L328">      mSchema = Schema.create(Schema.Type.NULL);</span>
+<span class="nc" id="L329">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public Object convert(NullWritable input) {
+<span class="nc" id="L334">      return null;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L340">      return mSchema;</span>
+    }
+  }
+
+  /** Converts Text into CharSequences. */
+  public static class TextConverter extends AvroDatumConverter&lt;Text, CharSequence&gt; {
+    private final Schema mSchema;
+
+    /** Constructor. */
+<span class="nc" id="L349">    public TextConverter() {</span>
+<span class="nc" id="L350">      mSchema = Schema.create(Schema.Type.STRING);</span>
+<span class="nc" id="L351">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public CharSequence convert(Text input) {
+<span class="nc" id="L356">      return input.toString();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Schema getWriterSchema() {
+<span class="nc" id="L362">      return mSchema;</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

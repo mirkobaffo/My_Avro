@@ -1,14 +1,14 @@
-#Mon Aug 23 16:35:42 CEST 2021
+#Tue Aug 24 15:43:42 CEST 2021
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/TrevniUtil.java=1629714265207
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/IdlTool.java=1629714265205
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/TrevniMetadataTool.java=1629714265207
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/TetherTool.java=1629714265207
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/DataFileGetMetaTool.java=1629714265205
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/CreateRandomFileTool.java=1629714265205
-/Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/DataFileReadTool.java=1629714265205
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/CatTool.java=1629714265204
-/Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/Main.java=1629714265206
+/Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/DataFileReadTool.java=1629714265205
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/DataFileWriteTool.java=1629714265205
+/Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/Main.java=1629714265206
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/RpcSendTool.java=1629714265206
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/ToTextTool.java=1629714265207
 /Users/mirko/git/My_Avro/lang/java/tools/src/main/java/org/apache/avro/tool/ConcatTool.java=1629714265205

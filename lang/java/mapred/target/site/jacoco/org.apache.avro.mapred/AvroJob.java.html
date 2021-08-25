@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroJob.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred</a> &gt; <span class="el_source">AvroJob.java</span></div><h1>AvroJob.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.avro.mapred;
+
+import java.util.Collection;
+import java.lang.reflect.Constructor;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.lib.IdentityMapper;
+import org.apache.hadoop.mapred.lib.IdentityReducer;
+import org.apache.hadoop.util.ReflectionUtils;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.reflect.ReflectData;
+import org.apache.avro.specific.SpecificData;
+
+/** Setters to configure jobs for Avro data. */
+public class AvroJob {
+  private AvroJob() {
+  } // no public ctor
+
+  static final String MAPPER = &quot;avro.mapper&quot;;
+  static final String COMBINER = &quot;avro.combiner&quot;;
+  static final String REDUCER = &quot;avro.reducer&quot;;
+
+  /** The configuration key for a job's input schema. */
+  public static final String INPUT_SCHEMA = &quot;avro.input.schema&quot;;
+  /** The configuration key for a job's intermediate schema. */
+  public static final String MAP_OUTPUT_SCHEMA = &quot;avro.map.output.schema&quot;;
+  /** The configuration key for a job's output schema. */
+  public static final String OUTPUT_SCHEMA = &quot;avro.output.schema&quot;;
+  /**
+   * The configuration key for a job's output compression codec. This takes one of
+   * the strings registered in {@link org.apache.avro.file.CodecFactory}
+   */
+  public static final String OUTPUT_CODEC = &quot;avro.output.codec&quot;;
+  /** The configuration key prefix for a text output metadata. */
+  public static final String TEXT_PREFIX = &quot;avro.meta.text.&quot;;
+  /** The configuration key prefix for a binary output metadata. */
+  public static final String BINARY_PREFIX = &quot;avro.meta.binary.&quot;;
+  /** The configuration key for reflection-based input representation. */
+  public static final String INPUT_IS_REFLECT = &quot;avro.input.is.reflect&quot;;
+  /** The configuration key for reflection-based map output representation. */
+  public static final String MAP_OUTPUT_IS_REFLECT = &quot;avro.map.output.is.reflect&quot;;
+  /** The configuration key for the data model implementation class. */
+  private static final String CONF_DATA_MODEL = &quot;avro.serialization.data.model&quot;;
+
+  /** Configure a job's map input schema. */
+  public static void setInputSchema(JobConf job, Schema s) {
+<span class="nc" id="L70">    job.set(INPUT_SCHEMA, s.toString());</span>
+<span class="nc" id="L71">    configureAvroInput(job);</span>
+<span class="nc" id="L72">  }</span>
+
+  /** Return a job's map input schema. */
+  public static Schema getInputSchema(Configuration job) {
+<span class="nc" id="L76">    String schemaString = job.get(INPUT_SCHEMA);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    return schemaString != null ? new Schema.Parser().parse(schemaString) : null;</span>
+  }
+
+  /**
+   * Configure a job's map output schema. The map output schema defaults to the
+   * output schema and need only be specified when it differs. Thus must be a
+   * {@link Pair} schema.
+   */
+  public static void setMapOutputSchema(JobConf job, Schema s) {
+<span class="nc" id="L86">    job.set(MAP_OUTPUT_SCHEMA, s.toString());</span>
+<span class="nc" id="L87">    configureAvroShuffle(job);</span>
+<span class="nc" id="L88">  }</span>
+
+  /** Return a job's map output key schema. */
+  public static Schema getMapOutputSchema(Configuration job) {
+<span class="nc" id="L92">    return new Schema.Parser().parse(job.get(MAP_OUTPUT_SCHEMA, job.get(OUTPUT_SCHEMA)));</span>
+  }
+
+  /**
+   * Configure a job's output schema. Unless this is a map-only job, this must be
+   * a {@link Pair} schema.
+   */
+  public static void setOutputSchema(JobConf job, Schema s) {
+<span class="nc" id="L100">    job.set(OUTPUT_SCHEMA, s.toString());</span>
+<span class="nc" id="L101">    configureAvroOutput(job);</span>
+<span class="nc" id="L102">  }</span>
+
+  /** Configure a job's output compression codec. */
+  public static void setOutputCodec(JobConf job, String codec) {
+<span class="nc" id="L106">    job.set(OUTPUT_CODEC, codec);</span>
+<span class="nc" id="L107">  }</span>
+
+  /** Add metadata to job output files. */
+  public static void setOutputMeta(JobConf job, String key, String value) {
+<span class="nc" id="L111">    job.set(TEXT_PREFIX + key, value);</span>
+<span class="nc" id="L112">  }</span>
+
+  /** Add metadata to job output files. */
+  public static void setOutputMeta(JobConf job, String key, long value) {
+<span class="nc" id="L116">    job.set(TEXT_PREFIX + key, Long.toString(value));</span>
+<span class="nc" id="L117">  }</span>
+
+  /** Add metadata to job output files. */
+  public static void setOutputMeta(JobConf job, String key, byte[] value) {
+    try {
+<span class="nc" id="L122">      job.set(BINARY_PREFIX + key,</span>
+<span class="nc" id="L123">          URLEncoder.encode(new String(value, StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1.name()));</span>
+<span class="nc" id="L124">    } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L125">    }</span>
+<span class="nc" id="L126">  }</span>
+
+  /** Indicate that a job's input files are in SequenceFile format. */
+  public static void setInputSequenceFile(JobConf job) {
+<span class="nc" id="L130">    job.setInputFormat(SequenceFileInputFormat.class);</span>
+<span class="nc" id="L131">  }</span>
+
+  /** Indicate that all a job's data should use the reflect representation. */
+  public static void setReflect(JobConf job) {
+<span class="nc" id="L135">    setInputReflect(job);</span>
+<span class="nc" id="L136">    setMapOutputReflect(job);</span>
+<span class="nc" id="L137">  }</span>
+
+  /** Indicate that a job's input data should use reflect representation. */
+  public static void setInputReflect(JobConf job) {
+<span class="nc" id="L141">    job.setBoolean(INPUT_IS_REFLECT, true);</span>
+<span class="nc" id="L142">  }</span>
+
+  /** Indicate that a job's map output data should use reflect representation. */
+  public static void setMapOutputReflect(JobConf job) {
+<span class="nc" id="L146">    job.setBoolean(MAP_OUTPUT_IS_REFLECT, true);</span>
+<span class="nc" id="L147">  }</span>
+
+  /** Return a job's output key schema. */
+  public static Schema getOutputSchema(Configuration job) {
+<span class="nc" id="L151">    return new Schema.Parser().parse(job.get(OUTPUT_SCHEMA));</span>
+  }
+
+  private static void configureAvroInput(JobConf job) {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">    if (job.get(&quot;mapred.input.format.class&quot;) == null)</span>
+<span class="nc" id="L156">      job.setInputFormat(AvroInputFormat.class);</span>
+
+<span class="nc bnc" id="L158" title="All 2 branches missed.">    if (job.getMapperClass() == IdentityMapper.class)</span>
+<span class="nc" id="L159">      job.setMapperClass(HadoopMapper.class);</span>
+
+<span class="nc" id="L161">    configureAvroShuffle(job);</span>
+<span class="nc" id="L162">  }</span>
+
+  private static void configureAvroOutput(JobConf job) {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">    if (job.get(&quot;mapred.output.format.class&quot;) == null)</span>
+<span class="nc" id="L166">      job.setOutputFormat(AvroOutputFormat.class);</span>
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">    if (job.getReducerClass() == IdentityReducer.class)</span>
+<span class="nc" id="L169">      job.setReducerClass(HadoopReducer.class);</span>
+
+<span class="nc" id="L171">    job.setOutputKeyClass(AvroWrapper.class);</span>
+<span class="nc" id="L172">    configureAvroShuffle(job);</span>
+<span class="nc" id="L173">  }</span>
+
+  private static void configureAvroShuffle(JobConf job) {
+<span class="nc" id="L176">    job.setOutputKeyComparatorClass(AvroKeyComparator.class);</span>
+<span class="nc" id="L177">    job.setMapOutputKeyClass(AvroKey.class);</span>
+<span class="nc" id="L178">    job.setMapOutputValueClass(AvroValue.class);</span>
+
+    // add AvroSerialization to io.serializations
+<span class="nc" id="L181">    Collection&lt;String&gt; serializations = job.getStringCollection(&quot;io.serializations&quot;);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">    if (!serializations.contains(AvroSerialization.class.getName())) {</span>
+<span class="nc" id="L183">      serializations.add(AvroSerialization.class.getName());</span>
+<span class="nc" id="L184">      job.setStrings(&quot;io.serializations&quot;, serializations.toArray(new String[0]));</span>
+    }
+<span class="nc" id="L186">  }</span>
+
+  /** Configure a job's mapper implementation. */
+  public static void setMapperClass(JobConf job, Class&lt;? extends AvroMapper&gt; c) {
+<span class="nc" id="L190">    job.set(MAPPER, c.getName());</span>
+<span class="nc" id="L191">  }</span>
+
+  /** Configure a job's combiner implementation. */
+  public static void setCombinerClass(JobConf job, Class&lt;? extends AvroReducer&gt; c) {
+<span class="nc" id="L195">    job.set(COMBINER, c.getName());</span>
+<span class="nc" id="L196">    job.setCombinerClass(HadoopCombiner.class);</span>
+<span class="nc" id="L197">  }</span>
+
+  /** Configure a job's reducer implementation. */
+  public static void setReducerClass(JobConf job, Class&lt;? extends AvroReducer&gt; c) {
+<span class="nc" id="L201">    job.set(REDUCER, c.getName());</span>
+<span class="nc" id="L202">  }</span>
+
+  /** Configure a job's data model implementation class. */
+  public static void setDataModelClass(JobConf job, Class&lt;? extends GenericData&gt; modelClass) {
+<span class="nc" id="L206">    job.setClass(CONF_DATA_MODEL, modelClass, GenericData.class);</span>
+<span class="nc" id="L207">  }</span>
+
+  /** Return the job's data model implementation class. */
+  public static Class&lt;? extends GenericData&gt; getDataModelClass(Configuration conf) {
+<span class="nc" id="L211">    return conf.getClass(CONF_DATA_MODEL, ReflectData.class, GenericData.class);</span>
+  }
+
+  private static GenericData newDataModelInstance(Class&lt;? extends GenericData&gt; modelClass, Configuration conf) {
+    GenericData dataModel;
+    try {
+<span class="nc" id="L217">      Constructor&lt;? extends GenericData&gt; ctor = modelClass.getDeclaredConstructor(ClassLoader.class);</span>
+<span class="nc" id="L218">      ctor.setAccessible(true);</span>
+<span class="nc" id="L219">      dataModel = ctor.newInstance(conf.getClassLoader());</span>
+<span class="nc" id="L220">    } catch (Exception e) {</span>
+<span class="nc" id="L221">      throw new RuntimeException(e);</span>
+<span class="nc" id="L222">    }</span>
+<span class="nc" id="L223">    ReflectionUtils.setConf(dataModel, conf);</span>
+<span class="nc" id="L224">    return dataModel;</span>
+  }
+
+  public static GenericData createDataModel(Configuration conf) {
+<span class="nc" id="L228">    return newDataModelInstance(getDataModelClass(conf), conf);</span>
+  }
+
+  public static GenericData createInputDataModel(Configuration conf) {
+<span class="nc" id="L232">    String className = conf.get(CONF_DATA_MODEL, null);</span>
+    Class&lt;? extends GenericData&gt; modelClass;
+<span class="nc bnc" id="L234" title="All 2 branches missed.">    if (className != null) {</span>
+<span class="nc" id="L235">      modelClass = getDataModelClass(conf);</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">    } else if (conf.getBoolean(INPUT_IS_REFLECT, false)) {</span>
+<span class="nc" id="L237">      modelClass = ReflectData.class;</span>
+    } else {
+<span class="nc" id="L239">      modelClass = SpecificData.class;</span>
+    }
+<span class="nc" id="L241">    return newDataModelInstance(modelClass, conf);</span>
+  }
+
+  public static GenericData createMapOutputDataModel(Configuration conf) {
+<span class="nc" id="L245">    String className = conf.get(CONF_DATA_MODEL, null);</span>
+    Class&lt;? extends GenericData&gt; modelClass;
+<span class="nc bnc" id="L247" title="All 2 branches missed.">    if (className != null) {</span>
+<span class="nc" id="L248">      modelClass = getDataModelClass(conf);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">    } else if (conf.getBoolean(MAP_OUTPUT_IS_REFLECT, false)) {</span>
+<span class="nc" id="L250">      modelClass = ReflectData.class;</span>
+    } else {
+<span class="nc" id="L252">      modelClass = SpecificData.class;</span>
+    }
+<span class="nc" id="L254">    return newDataModelInstance(modelClass, conf);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -78,4 +78,11 @@ public class TestAvroWrapper {
     	AvroWrapper<String> wrapperString = new AvroWrapper (datumString);
     	assertEquals(datumString, wrapperString.toString());
     }
+
+
+    @Test
+	public void testForEquals(){
+		AvroWrapper <String> aWS = new AvroWrapper(datumString);
+		assertFalse(equals(datumString));
+	}
 }

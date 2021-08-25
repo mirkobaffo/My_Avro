@@ -1,20 +1,20 @@
-#Mon Aug 23 16:34:46 CEST 2021
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SeekableFileInput.java=1629714264997
+#Tue Aug 24 15:43:06 CEST 2021
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/RecordBuilderBase.java=1629714264996
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/SeekableFileInput.java=1629714264997
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/BinaryMessageEncoder.java=1629714265001
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/BufferedBinaryEncoder.java=1629714264999
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/MessageEncoder.java=1629714265002
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroName.java=1629714265003
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificExceptionBase.java=1629714265004
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Resolver.java=1629714264994
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/RawMessageEncoder.java=1629714265002
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/data/Json.java=1629714264996
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/message/RawMessageEncoder.java=1629714265002
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Resolver.java=1629714264994
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/specific/SpecificExceptionBase.java=1629714265004
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroName.java=1629714265003
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/Protocol.java=1629714264994
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/JsonDecoder.java=1629714265000
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/AvroMissingFieldException.java=1629714264993
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/file/DataFileReader12.java=1629714264996
-/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroMeta.java=1629714265003
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/InvalidAvroMagicException.java=1629714264994
+/Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/reflect/AvroMeta.java=1629714265003
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/SchemaBuilderException.java=1629714264995
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/io/ValidatingDecoder.java=1629714265000
 /Users/mirko/git/My_Avro/lang/java/avro/src/main/java/org/apache/avro/ValidateMutualRead.java=1629714264996

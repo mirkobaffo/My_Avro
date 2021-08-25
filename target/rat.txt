@@ -2,14 +2,14 @@
 *****************************************************
 Summary
 -------
-Generated at: 2021-08-23T16:52:22+02:00
+Generated at: 2021-08-24T15:43:01+02:00
 
 Notes: 45
-Binaries: 121
+Binaries: 122
 Archives: 0
-Standards: 1097
+Standards: 1098
 
-Apache Licensed: 1094
+Apache Licensed: 1095
 Generated Documents: 0
 
 JavaDocs are generated, thus a license header is optional.
@@ -329,6 +329,7 @@ Generated files do not require license headers.
   AL    lang/java/eclipse-java-formatter.xml
   AL    lang/java/pom.xml
   AL    lang/java/mapred/bin/pom.xml
+  B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/FsInputTest.class
   B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTask$Buffer.class
   B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/WordCountTask.class
   B     lang/java/mapred/bin/src/test/java/org/apache/avro/mapred/tether/TetherTask.class
@@ -455,6 +456,7 @@ Generated files do not require license headers.
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/WordCountTask.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/tether/TetherTask.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/TestAvroWrapper.java
+  AL    lang/java/mapred/src/test/java/org/apache/avro/mapred/FsInputTest.java
   AL    lang/java/mapred/src/test/java/org/apache/avro/mapreduce/AvroFiles.java
   N     lang/java/mapred/src/main/resources/META-INF/NOTICE
   AL    lang/java/mapred/src/main/java/org/apache/avro/mapred/AvroKeyComparator.java

@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pair.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred</a> &gt; <span class="el_source">Pair.java</span></div><h1>Pair.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.avro.mapred;
+
+import java.util.List;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.nio.ByteBuffer;
+
+import org.apache.avro.Schema;
+import org.apache.avro.AvroRuntimeException;
+import org.apache.avro.Schema.Type;
+import org.apache.avro.Schema.Field;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericContainer;
+import org.apache.avro.generic.IndexedRecord;
+import org.apache.avro.specific.SpecificData.SchemaConstructable;
+import org.apache.avro.reflect.ReflectData;
+
+/** A key/value pair. */
+public class Pair&lt;K, V&gt; implements IndexedRecord, Comparable&lt;Pair&gt;, SchemaConstructable {
+
+<span class="nc" id="L40">  private static final String PAIR = Pair.class.getName();</span>
+  private static final String KEY = &quot;key&quot;;
+  private static final String VALUE = &quot;value&quot;;
+
+  private Schema schema;
+  private K key;
+  private V value;
+
+<span class="nc" id="L48">  public Pair(Schema schema) {</span>
+<span class="nc" id="L49">    checkIsPairSchema(schema);</span>
+<span class="nc" id="L50">    this.schema = schema;</span>
+<span class="nc" id="L51">  }</span>
+
+<span class="nc" id="L53">  public Pair(K key, Schema keySchema, V value, Schema valueSchema) {</span>
+<span class="nc" id="L54">    this.schema = getPairSchema(keySchema, valueSchema);</span>
+<span class="nc" id="L55">    this.key = key;</span>
+<span class="nc" id="L56">    this.value = value;</span>
+<span class="nc" id="L57">  }</span>
+
+  private static void checkIsPairSchema(Schema schema) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    if (!PAIR.equals(schema.getFullName()))</span>
+<span class="nc" id="L61">      throw new IllegalArgumentException(&quot;Not a Pair schema: &quot; + schema);</span>
+<span class="nc" id="L62">  }</span>
+
+  /** Return a pair's key schema. */
+  public static Schema getKeySchema(Schema pair) {
+<span class="nc" id="L66">    checkIsPairSchema(pair);</span>
+<span class="nc" id="L67">    return pair.getField(KEY).schema();</span>
+  }
+
+  /** Return a pair's value schema. */
+  public static Schema getValueSchema(Schema pair) {
+<span class="nc" id="L72">    checkIsPairSchema(pair);</span>
+<span class="nc" id="L73">    return pair.getField(VALUE).schema();</span>
+  }
+
+<span class="nc" id="L76">  private static final Map&lt;Schema, Map&lt;Schema, Schema&gt;&gt; SCHEMA_CACHE = new WeakHashMap&lt;&gt;();</span>
+
+  /** Get a pair schema. */
+  public static Schema getPairSchema(Schema key, Schema value) {
+    Map&lt;Schema, Schema&gt; valueSchemas;
+<span class="nc" id="L81">    synchronized (SCHEMA_CACHE) {</span>
+<span class="nc" id="L82">      valueSchemas = SCHEMA_CACHE.computeIfAbsent(key, k -&gt; new WeakHashMap&lt;&gt;());</span>
+      Schema result;
+<span class="nc" id="L84">      result = valueSchemas.get(value);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">      if (result == null) {</span>
+<span class="nc" id="L86">        result = makePairSchema(key, value);</span>
+<span class="nc" id="L87">        valueSchemas.put(value, result);</span>
+      }
+<span class="nc" id="L89">      return result;</span>
+    }
+  }
+
+  private static Schema makePairSchema(Schema key, Schema value) {
+<span class="nc" id="L94">    Schema pair = Schema.createRecord(PAIR, null, null, false);</span>
+<span class="nc" id="L95">    List&lt;Field&gt; fields = Arrays.asList(new Field(KEY, key, &quot;&quot;, null),</span>
+        new Field(VALUE, value, &quot;&quot;, null, Field.Order.IGNORE));
+<span class="nc" id="L97">    pair.setFields(fields);</span>
+<span class="nc" id="L98">    return pair;</span>
+  }
+
+  @Override
+  public Schema getSchema() {
+<span class="nc" id="L103">    return schema;</span>
+  }
+
+  /** Get the key. */
+  public K key() {
+<span class="nc" id="L108">    return key;</span>
+  }
+
+  /** Set the key. */
+  public void key(K key) {
+<span class="nc" id="L113">    this.key = key;</span>
+<span class="nc" id="L114">  }</span>
+
+  /** Get the value. */
+  public V value() {
+<span class="nc" id="L118">    return value;</span>
+  }
+
+  /** Set the value. */
+  public void value(V value) {
+<span class="nc" id="L123">    this.value = value;</span>
+<span class="nc" id="L124">  }</span>
+
+  /** Set both the key and value. */
+  public void set(K key, V value) {
+<span class="nc" id="L128">    this.key = key;</span>
+<span class="nc" id="L129">    this.value = value;</span>
+<span class="nc" id="L130">  }</span>
+
+  @Override
+  public boolean equals(Object o) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">    if (o == this)</span>
+<span class="nc" id="L135">      return true; // identical object</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">    if (!(o instanceof Pair))</span>
+<span class="nc" id="L137">      return false; // not a pair</span>
+<span class="nc" id="L138">    Pair that = (Pair) o;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">    if (!this.schema.equals(that.schema))</span>
+<span class="nc" id="L140">      return false; // not the same schema</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">    return this.compareTo(that) == 0;</span>
+  }
+
+  @Override
+  public int hashCode() {
+<span class="nc" id="L146">    return GenericData.get().hashCode(this, schema);</span>
+  }
+
+  @Override
+  public int compareTo(Pair that) {
+<span class="nc" id="L151">    return GenericData.get().compare(this, that, schema);</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="nc" id="L156">    return GenericData.get().toString(this);</span>
+  }
+
+  @Override
+  public Object get(int i) {
+<span class="nc bnc" id="L161" title="All 3 branches missed.">    switch (i) {</span>
+    case 0:
+<span class="nc" id="L163">      return key;</span>
+    case 1:
+<span class="nc" id="L165">      return value;</span>
+    default:
+<span class="nc" id="L167">      throw new org.apache.avro.AvroRuntimeException(&quot;Bad index: &quot; + i);</span>
+    }
+  }
+
+  @Override
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public void put(int i, Object o) {
+<span class="nc bnc" id="L174" title="All 3 branches missed.">    switch (i) {</span>
+    case 0:
+<span class="nc" id="L176">      this.key = (K) o;</span>
+<span class="nc" id="L177">      break;</span>
+    case 1:
+<span class="nc" id="L179">      this.value = (V) o;</span>
+<span class="nc" id="L180">      break;</span>
+    default:
+<span class="nc" id="L182">      throw new org.apache.avro.AvroRuntimeException(&quot;Bad index: &quot; + i);</span>
+    }
+<span class="nc" id="L184">  }</span>
+
+<span class="nc" id="L186">  private static final Schema STRING_SCHEMA = Schema.create(Type.STRING);</span>
+<span class="nc" id="L187">  private static final Schema BYTES_SCHEMA = Schema.create(Type.BYTES);</span>
+<span class="nc" id="L188">  private static final Schema INT_SCHEMA = Schema.create(Type.INT);</span>
+<span class="nc" id="L189">  private static final Schema LONG_SCHEMA = Schema.create(Type.LONG);</span>
+<span class="nc" id="L190">  private static final Schema FLOAT_SCHEMA = Schema.create(Type.FLOAT);</span>
+<span class="nc" id="L191">  private static final Schema DOUBLE_SCHEMA = Schema.create(Type.DOUBLE);</span>
+<span class="nc" id="L192">  private static final Schema NULL_SCHEMA = Schema.create(Type.NULL);</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Object value) {
+<span class="nc" id="L196">    this((K) key, getSchema(key), (V) value, getSchema(value));</span>
+<span class="nc" id="L197">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, GenericContainer value) {
+<span class="nc" id="L201">    this((K) key, getSchema(key), (V) value, value.getSchema());</span>
+<span class="nc" id="L202">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, CharSequence value) {
+<span class="nc" id="L206">    this((K) key, getSchema(key), (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L207">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, ByteBuffer value) {
+<span class="nc" id="L211">    this((K) key, getSchema(key), (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L212">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Integer value) {
+<span class="nc" id="L216">    this((K) key, getSchema(key), (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L217">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Long value) {
+<span class="nc" id="L221">    this((K) key, getSchema(key), (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L222">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Float value) {
+<span class="nc" id="L226">    this((K) key, getSchema(key), (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L227">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Double value) {
+<span class="nc" id="L231">    this((K) key, getSchema(key), (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L232">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Object key, Void value) {
+<span class="nc" id="L236">    this((K) key, getSchema(key), (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L237">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Object value) {
+<span class="nc" id="L241">    this((K) key, key.getSchema(), (V) value, getSchema(value));</span>
+<span class="nc" id="L242">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, GenericContainer value) {
+<span class="nc" id="L246">    this((K) key, key.getSchema(), (V) value, value.getSchema());</span>
+<span class="nc" id="L247">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, CharSequence value) {
+<span class="nc" id="L251">    this((K) key, key.getSchema(), (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L252">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, ByteBuffer value) {
+<span class="nc" id="L256">    this((K) key, key.getSchema(), (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L257">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Integer value) {
+<span class="nc" id="L261">    this((K) key, key.getSchema(), (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L262">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Long value) {
+<span class="nc" id="L266">    this((K) key, key.getSchema(), (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L267">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Float value) {
+<span class="nc" id="L271">    this((K) key, key.getSchema(), (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L272">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Double value) {
+<span class="nc" id="L276">    this((K) key, key.getSchema(), (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L277">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(GenericContainer key, Void value) {
+<span class="nc" id="L281">    this((K) key, key.getSchema(), (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L282">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Object value) {
+<span class="nc" id="L286">    this((K) key, STRING_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L287">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, GenericContainer value) {
+<span class="nc" id="L291">    this((K) key, STRING_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L292">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, CharSequence value) {
+<span class="nc" id="L296">    this((K) key, STRING_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L297">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, ByteBuffer value) {
+<span class="nc" id="L301">    this((K) key, STRING_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L302">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Integer value) {
+<span class="nc" id="L306">    this((K) key, STRING_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L307">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Long value) {
+<span class="nc" id="L311">    this((K) key, STRING_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L312">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Float value) {
+<span class="nc" id="L316">    this((K) key, STRING_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L317">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Double value) {
+<span class="nc" id="L321">    this((K) key, STRING_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L322">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(CharSequence key, Void value) {
+<span class="nc" id="L326">    this((K) key, STRING_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L327">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Object value) {
+<span class="nc" id="L331">    this((K) key, BYTES_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L332">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, GenericContainer value) {
+<span class="nc" id="L336">    this((K) key, BYTES_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L337">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, CharSequence value) {
+<span class="nc" id="L341">    this((K) key, BYTES_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L342">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, ByteBuffer value) {
+<span class="nc" id="L346">    this((K) key, BYTES_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L347">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Integer value) {
+<span class="nc" id="L351">    this((K) key, BYTES_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L352">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Long value) {
+<span class="nc" id="L356">    this((K) key, BYTES_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L357">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Float value) {
+<span class="nc" id="L361">    this((K) key, BYTES_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L362">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Double value) {
+<span class="nc" id="L366">    this((K) key, BYTES_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L367">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(ByteBuffer key, Void value) {
+<span class="nc" id="L371">    this((K) key, BYTES_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L372">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Object value) {
+<span class="nc" id="L376">    this((K) key, INT_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L377">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, GenericContainer value) {
+<span class="nc" id="L381">    this((K) key, INT_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L382">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, CharSequence value) {
+<span class="nc" id="L386">    this((K) key, INT_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L387">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, ByteBuffer value) {
+<span class="nc" id="L391">    this((K) key, INT_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L392">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Integer value) {
+<span class="nc" id="L396">    this((K) key, INT_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L397">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Long value) {
+<span class="nc" id="L401">    this((K) key, INT_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L402">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Float value) {
+<span class="nc" id="L406">    this((K) key, INT_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L407">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Double value) {
+<span class="nc" id="L411">    this((K) key, INT_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L412">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Integer key, Void value) {
+<span class="nc" id="L416">    this((K) key, INT_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L417">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Object value) {
+<span class="nc" id="L421">    this((K) key, LONG_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L422">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, GenericContainer value) {
+<span class="nc" id="L426">    this((K) key, LONG_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L427">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, CharSequence value) {
+<span class="nc" id="L431">    this((K) key, LONG_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L432">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, ByteBuffer value) {
+<span class="nc" id="L436">    this((K) key, LONG_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L437">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Integer value) {
+<span class="nc" id="L441">    this((K) key, LONG_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L442">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Long value) {
+<span class="nc" id="L446">    this((K) key, LONG_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L447">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Float value) {
+<span class="nc" id="L451">    this((K) key, LONG_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L452">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Double value) {
+<span class="nc" id="L456">    this((K) key, LONG_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L457">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Long key, Void value) {
+<span class="nc" id="L461">    this((K) key, LONG_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L462">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Object value) {
+<span class="nc" id="L466">    this((K) key, FLOAT_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L467">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, GenericContainer value) {
+<span class="nc" id="L471">    this((K) key, FLOAT_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L472">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, CharSequence value) {
+<span class="nc" id="L476">    this((K) key, FLOAT_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L477">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, ByteBuffer value) {
+<span class="nc" id="L481">    this((K) key, FLOAT_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L482">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Integer value) {
+<span class="nc" id="L486">    this((K) key, FLOAT_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L487">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Long value) {
+<span class="nc" id="L491">    this((K) key, FLOAT_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L492">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Float value) {
+<span class="nc" id="L496">    this((K) key, FLOAT_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L497">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Double value) {
+<span class="nc" id="L501">    this((K) key, FLOAT_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L502">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Float key, Void value) {
+<span class="nc" id="L506">    this((K) key, FLOAT_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L507">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Object value) {
+<span class="nc" id="L511">    this((K) key, DOUBLE_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L512">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, GenericContainer value) {
+<span class="nc" id="L516">    this((K) key, DOUBLE_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L517">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, CharSequence value) {
+<span class="nc" id="L521">    this((K) key, DOUBLE_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L522">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, ByteBuffer value) {
+<span class="nc" id="L526">    this((K) key, DOUBLE_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L527">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Integer value) {
+<span class="nc" id="L531">    this((K) key, DOUBLE_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L532">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Long value) {
+<span class="nc" id="L536">    this((K) key, DOUBLE_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L537">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Float value) {
+<span class="nc" id="L541">    this((K) key, DOUBLE_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L542">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Double value) {
+<span class="nc" id="L546">    this((K) key, DOUBLE_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L547">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Double key, Void value) {
+<span class="nc" id="L551">    this((K) key, DOUBLE_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L552">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Object value) {
+<span class="nc" id="L556">    this((K) key, NULL_SCHEMA, (V) value, getSchema(value));</span>
+<span class="nc" id="L557">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, GenericContainer value) {
+<span class="nc" id="L561">    this((K) key, NULL_SCHEMA, (V) value, value.getSchema());</span>
+<span class="nc" id="L562">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, CharSequence value) {
+<span class="nc" id="L566">    this((K) key, NULL_SCHEMA, (V) value, STRING_SCHEMA);</span>
+<span class="nc" id="L567">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, ByteBuffer value) {
+<span class="nc" id="L571">    this((K) key, NULL_SCHEMA, (V) value, BYTES_SCHEMA);</span>
+<span class="nc" id="L572">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Integer value) {
+<span class="nc" id="L576">    this((K) key, NULL_SCHEMA, (V) value, INT_SCHEMA);</span>
+<span class="nc" id="L577">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Long value) {
+<span class="nc" id="L581">    this((K) key, NULL_SCHEMA, (V) value, LONG_SCHEMA);</span>
+<span class="nc" id="L582">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Float value) {
+<span class="nc" id="L586">    this((K) key, NULL_SCHEMA, (V) value, FLOAT_SCHEMA);</span>
+<span class="nc" id="L587">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Double value) {
+<span class="nc" id="L591">    this((K) key, NULL_SCHEMA, (V) value, DOUBLE_SCHEMA);</span>
+<span class="nc" id="L592">  }</span>
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public Pair(Void key, Void value) {
+<span class="nc" id="L596">    this((K) key, NULL_SCHEMA, (V) value, NULL_SCHEMA);</span>
+<span class="nc" id="L597">  }</span>
+
+  private static Schema getSchema(Object o) {
+    try {
+<span class="nc" id="L601">      return ReflectData.get().getSchema(o.getClass());</span>
+<span class="nc" id="L602">    } catch (AvroRuntimeException e) {</span>
+<span class="nc" id="L603">      throw new AvroRuntimeException(</span>
+<span class="nc" id="L604">          &quot;Cannot infer schema for : &quot; + o.getClass() + &quot;.  Must create Pair with explicit key and value schemas.&quot;, e);</span>
+    }
+  }
+
+  // private static final String[][] TABLE = new String[][] {
+  // {&quot;Object&quot;, &quot;getSchema({0})&quot;},
+  // {&quot;GenericContainer&quot;, &quot;{0}.getSchema()&quot;},
+  // {&quot;CharSequence&quot;, &quot;STRING_SCHEMA&quot;},
+  // {&quot;ByteBuffer&quot;, &quot;BYTES_SCHEMA&quot;},
+  // {&quot;Integer&quot;, &quot;INT_SCHEMA&quot;},
+  // {&quot;Long&quot;, &quot;LONG_SCHEMA&quot;},
+  // {&quot;Float&quot;, &quot;FLOAT_SCHEMA&quot;},
+  // {&quot;Double&quot;, &quot;DOUBLE_SCHEMA&quot;},
+  // {&quot;Void&quot;, &quot;NULL_SCHEMA&quot;},
+  // };
+
+  // private static String f(String pattern, String value) {
+  // return java.text.MessageFormat.format(pattern, value);
+  // }
+
+  // public static void main(String... args) throws Exception {
+  // StringBuffer b = new StringBuffer();
+  // for (String[] k : TABLE) {
+  // for (String[] v : TABLE) {
+  // b.append(&quot;@SuppressWarnings(\&quot;unchecked\&quot;)\n&quot;);
+  // b.append(&quot;public Pair(&quot;+k[0]+&quot; key, &quot;+v[0]+&quot; value) {\n&quot;);
+  // b.append(&quot; this((K)key, &quot;+f(k[1],&quot;key&quot;)
+  // +&quot;, (V)value, &quot;+f(v[1],&quot;value&quot;)+&quot;);\n&quot;);
+  // b.append(&quot;}\n&quot;);
+  // }
+  // }
+  // System.out.println(b);
+  // }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

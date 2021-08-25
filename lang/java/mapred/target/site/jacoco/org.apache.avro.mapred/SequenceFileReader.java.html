@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SequenceFileReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred</a> &gt; <span class="el_source">SequenceFileReader.java</span></div><h1>SequenceFileReader.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.avro.mapred;
+
+import java.io.IOException;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
+import java.net.URI;
+import java.lang.reflect.Type;
+
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.ReflectionUtils;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+
+import org.apache.avro.Schema;
+import org.apache.avro.AvroRuntimeException;
+import org.apache.avro.file.FileReader;
+import org.apache.avro.reflect.ReflectData;
+
+/** A {@link FileReader} for sequence files. */
+@SuppressWarnings(value = &quot;unchecked&quot;)
+public class SequenceFileReader&lt;K, V&gt; implements FileReader&lt;Pair&lt;K, V&gt;&gt; {
+  private SequenceFile.Reader reader;
+  private Schema schema;
+<span class="nc" id="L55">  private boolean ready = false; // true iff done &amp; key are current</span>
+<span class="nc" id="L56">  private boolean done = false; // true iff at EOF</span>
+  private Writable key, spareKey, value;
+
+<span class="nc" id="L59">  private Converter&lt;K&gt; keyConverter = o -&gt; (K) o;</span>
+
+<span class="nc" id="L61">  private Converter&lt;V&gt; valConverter = o -&gt; (V) o;</span>
+
+  public SequenceFileReader(File file) throws IOException {
+<span class="nc" id="L64">    this(file.toURI(), new Configuration());</span>
+<span class="nc" id="L65">  }</span>
+
+  public SequenceFileReader(URI uri, Configuration c) throws IOException {
+<span class="nc" id="L68">    this(new SequenceFile.Reader(FileSystem.get(uri, c), new Path(uri.toString()), c), c);</span>
+<span class="nc" id="L69">  }</span>
+
+<span class="nc" id="L71">  public SequenceFileReader(SequenceFile.Reader reader, Configuration conf) {</span>
+<span class="nc" id="L72">    this.reader = reader;</span>
+<span class="nc" id="L73">    this.schema = Pair.getPairSchema(WritableData.get().getSchema(reader.getKeyClass()),</span>
+<span class="nc" id="L74">        WritableData.get().getSchema(reader.getValueClass()));</span>
+<span class="nc" id="L75">    this.key = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);</span>
+<span class="nc" id="L76">    this.spareKey = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);</span>
+<span class="nc" id="L77">    this.value = (Writable) ReflectionUtils.newInstance(reader.getValueClass(), conf);</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">    if (WRITABLE_CONVERTERS.containsKey(reader.getKeyClass()))</span>
+<span class="nc" id="L80">      keyConverter = WRITABLE_CONVERTERS.get(reader.getKeyClass());</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">    if (WRITABLE_CONVERTERS.containsKey(reader.getValueClass()))</span>
+<span class="nc" id="L82">      valConverter = WRITABLE_CONVERTERS.get(reader.getValueClass());</span>
+<span class="nc" id="L83">  }</span>
+
+  @Override
+  public void close() throws IOException {
+<span class="nc" id="L87">    reader.close();</span>
+<span class="nc" id="L88">  }</span>
+
+  @Override
+  public void remove() {
+<span class="nc" id="L92">    throw new UnsupportedOperationException();</span>
+  }
+
+  @Override
+  public Iterator&lt;Pair&lt;K, V&gt;&gt; iterator() {
+<span class="nc" id="L97">    return this;</span>
+  }
+
+  @Override
+  public Schema getSchema() {
+<span class="nc" id="L102">    return schema;</span>
+  }
+
+  private void prepare() throws IOException {
+<span class="nc bnc" id="L106" title="All 2 branches missed.">    if (ready)</span>
+<span class="nc" id="L107">      return;</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">    this.done = !reader.next(key);</span>
+<span class="nc" id="L109">    ready = true;</span>
+<span class="nc" id="L110">  }</span>
+
+  @Override
+  public boolean hasNext() {
+    try {
+<span class="nc" id="L115">      prepare();</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">      return !done;</span>
+<span class="nc" id="L117">    } catch (IOException e) {</span>
+<span class="nc" id="L118">      throw new AvroRuntimeException(e);</span>
+    }
+  }
+
+  @Override
+  public Pair&lt;K, V&gt; next() {
+    try {
+<span class="nc" id="L125">      return next(null);</span>
+<span class="nc" id="L126">    } catch (IOException e) {</span>
+<span class="nc" id="L127">      throw new AvroRuntimeException(e);</span>
+    }
+  }
+
+  @Override
+  public Pair&lt;K, V&gt; next(Pair&lt;K, V&gt; reuse) throws IOException {
+<span class="nc" id="L133">    prepare();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">    if (!hasNext())</span>
+<span class="nc" id="L135">      throw new NoSuchElementException();</span>
+
+<span class="nc" id="L137">    Pair&lt;K, V&gt; result = reuse;</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">    if (result == null)</span>
+<span class="nc" id="L139">      result = new Pair&lt;&gt;(schema);</span>
+
+<span class="nc" id="L141">    result.key(keyConverter.convert(key));</span>
+<span class="nc" id="L142">    reader.getCurrentValue(value);</span>
+<span class="nc" id="L143">    result.value(valConverter.convert(value));</span>
+
+    // swap key and spareKey
+<span class="nc" id="L146">    Writable k = key;</span>
+<span class="nc" id="L147">    key = spareKey;</span>
+<span class="nc" id="L148">    spareKey = k;</span>
+
+<span class="nc" id="L150">    ready = false;</span>
+
+<span class="nc" id="L152">    return result;</span>
+  }
+
+  @Override
+  public void sync(long position) throws IOException {
+<span class="nc bnc" id="L157" title="All 2 branches missed.">    if (position &gt; reader.getPosition())</span>
+<span class="nc" id="L158">      reader.sync(position);</span>
+<span class="nc" id="L159">    ready = false;</span>
+<span class="nc" id="L160">  }</span>
+
+  @Override
+  public boolean pastSync(long position) throws IOException {
+<span class="nc bnc" id="L164" title="All 4 branches missed.">    return reader.getPosition() &gt;= position &amp;&amp; reader.syncSeen();</span>
+  }
+
+  @Override
+  public long tell() throws IOException {
+<span class="nc" id="L169">    return reader.getPosition();</span>
+  }
+
+<span class="nc" id="L172">  private static final Map&lt;Type, Schema&gt; WRITABLE_SCHEMAS = new HashMap&lt;&gt;();</span>
+  static {
+<span class="nc" id="L174">    WRITABLE_SCHEMAS.put(NullWritable.class, Schema.create(Schema.Type.NULL));</span>
+<span class="nc" id="L175">    WRITABLE_SCHEMAS.put(BooleanWritable.class, Schema.create(Schema.Type.BOOLEAN));</span>
+<span class="nc" id="L176">    WRITABLE_SCHEMAS.put(IntWritable.class, Schema.create(Schema.Type.INT));</span>
+<span class="nc" id="L177">    WRITABLE_SCHEMAS.put(LongWritable.class, Schema.create(Schema.Type.LONG));</span>
+<span class="nc" id="L178">    WRITABLE_SCHEMAS.put(FloatWritable.class, Schema.create(Schema.Type.FLOAT));</span>
+<span class="nc" id="L179">    WRITABLE_SCHEMAS.put(DoubleWritable.class, Schema.create(Schema.Type.DOUBLE));</span>
+<span class="nc" id="L180">    WRITABLE_SCHEMAS.put(BytesWritable.class, Schema.create(Schema.Type.BYTES));</span>
+<span class="nc" id="L181">    WRITABLE_SCHEMAS.put(Text.class, Schema.create(Schema.Type.STRING));</span>
+  }
+
+  private static class WritableData extends ReflectData {
+<span class="nc" id="L185">    private static final WritableData INSTANCE = new WritableData();</span>
+
+<span class="nc" id="L187">    protected WritableData() {</span>
+<span class="nc" id="L188">    }</span>
+
+    /** Return the singleton instance. */
+    public static WritableData get() {
+<span class="nc" id="L192">      return INSTANCE;</span>
+    }
+
+    @Override
+    public Schema getSchema(java.lang.reflect.Type type) {
+<span class="nc bnc" id="L197" title="All 2 branches missed.">      if (WRITABLE_SCHEMAS.containsKey(type))</span>
+<span class="nc" id="L198">        return WRITABLE_SCHEMAS.get(type);</span>
+      else
+<span class="nc" id="L200">        return super.getSchema(type);</span>
+    }
+  }
+
+  private interface Converter&lt;T&gt; {
+    T convert(Writable o);
+  }
+
+<span class="nc" id="L208">  private static final Map&lt;Type, Converter&gt; WRITABLE_CONVERTERS = new HashMap&lt;&gt;();</span>
+  static {
+<span class="nc" id="L210">    WRITABLE_CONVERTERS.put(NullWritable.class, (Converter&lt;Void&gt;) o -&gt; null);</span>
+<span class="nc" id="L211">    WRITABLE_CONVERTERS.put(BooleanWritable.class, (Converter&lt;Boolean&gt;) o -&gt; ((BooleanWritable) o).get());</span>
+<span class="nc" id="L212">    WRITABLE_CONVERTERS.put(IntWritable.class, (Converter&lt;Integer&gt;) o -&gt; ((IntWritable) o).get());</span>
+<span class="nc" id="L213">    WRITABLE_CONVERTERS.put(LongWritable.class, (Converter&lt;Long&gt;) o -&gt; ((LongWritable) o).get());</span>
+<span class="nc" id="L214">    WRITABLE_CONVERTERS.put(FloatWritable.class, (Converter&lt;Float&gt;) o -&gt; ((FloatWritable) o).get());</span>
+<span class="nc" id="L215">    WRITABLE_CONVERTERS.put(DoubleWritable.class, (Converter&lt;Double&gt;) o -&gt; ((DoubleWritable) o).get());</span>
+<span class="nc" id="L216">    WRITABLE_CONVERTERS.put(BytesWritable.class, (Converter&lt;ByteBuffer&gt;) o -&gt; {</span>
+<span class="nc" id="L217">      BytesWritable b = (BytesWritable) o;</span>
+<span class="nc" id="L218">      return ByteBuffer.wrap(b.getBytes(), 0, b.getLength());</span>
+    });
+<span class="nc" id="L220">    WRITABLE_CONVERTERS.put(Text.class, (Converter&lt;String&gt;) Object::toString);</span>
+<span class="nc" id="L221">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

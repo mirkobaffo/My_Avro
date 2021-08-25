@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroOutputFormatBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapreduce</a> &gt; <span class="el_source">AvroOutputFormatBase.java</span></div><h1>AvroOutputFormatBase.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.mapreduce;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
+
+import org.apache.avro.file.CodecFactory;
+import org.apache.avro.file.DataFileConstants;
+import org.apache.avro.hadoop.file.HadoopCodecFactory;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import static org.apache.avro.file.CodecFactory.DEFAULT_ZSTANDARD_BUFFERPOOL;
+import static org.apache.avro.file.CodecFactory.DEFAULT_ZSTANDARD_LEVEL;
+
+/**
+ * Abstract base class for output formats that write Avro container files.
+ *
+ * @param &lt;K&gt; The type of key to write.
+ * @param &lt;V&gt; The type of value to write.
+ */
+<span class="nc" id="L41">public abstract class AvroOutputFormatBase&lt;K, V&gt; extends FileOutputFormat&lt;K, V&gt; {</span>
+
+  /**
+   * Gets the configured compression codec from the task context.
+   *
+   * @param context The task attempt context.
+   * @return The compression codec to use for the output Avro container file.
+   */
+  protected static CodecFactory getCompressionCodec(TaskAttemptContext context) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">    if (FileOutputFormat.getCompressOutput(context)) {</span>
+      // Default to deflate compression.
+<span class="nc" id="L52">      int deflateLevel = context.getConfiguration().getInt(org.apache.avro.mapred.AvroOutputFormat.DEFLATE_LEVEL_KEY,</span>
+          CodecFactory.DEFAULT_DEFLATE_LEVEL);
+<span class="nc" id="L54">      int xzLevel = context.getConfiguration().getInt(org.apache.avro.mapred.AvroOutputFormat.XZ_LEVEL_KEY,</span>
+          CodecFactory.DEFAULT_XZ_LEVEL);
+<span class="nc" id="L56">      int zstdLevel = context.getConfiguration().getInt(org.apache.avro.mapred.AvroOutputFormat.ZSTD_LEVEL_KEY,</span>
+          DEFAULT_ZSTANDARD_LEVEL);
+<span class="nc" id="L58">      boolean zstdBufferPool = context.getConfiguration()</span>
+<span class="nc" id="L59">          .getBoolean(org.apache.avro.mapred.AvroOutputFormat.ZSTD_BUFFERPOOL_KEY, DEFAULT_ZSTANDARD_BUFFERPOOL);</span>
+
+<span class="nc" id="L61">      String outputCodec = context.getConfiguration().get(AvroJob.CONF_OUTPUT_CODEC);</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">      if (outputCodec == null) {</span>
+<span class="nc" id="L64">        String compressionCodec = context.getConfiguration().get(&quot;mapred.output.compression.codec&quot;);</span>
+<span class="nc" id="L65">        String avroCodecName = HadoopCodecFactory.getAvroCodecName(compressionCodec);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (avroCodecName != null) {</span>
+<span class="nc" id="L67">          context.getConfiguration().set(AvroJob.CONF_OUTPUT_CODEC, avroCodecName);</span>
+<span class="nc" id="L68">          return HadoopCodecFactory.fromHadoopString(compressionCodec);</span>
+        } else {
+<span class="nc" id="L70">          return CodecFactory.deflateCodec(deflateLevel);</span>
+        }
+<span class="nc bnc" id="L72" title="All 2 branches missed.">      } else if (DataFileConstants.DEFLATE_CODEC.equals(outputCodec)) {</span>
+<span class="nc" id="L73">        return CodecFactory.deflateCodec(deflateLevel);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">      } else if (DataFileConstants.XZ_CODEC.equals(outputCodec)) {</span>
+<span class="nc" id="L75">        return CodecFactory.xzCodec(xzLevel);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">      } else if (DataFileConstants.ZSTANDARD_CODEC.equals(outputCodec)) {</span>
+<span class="nc" id="L77">        return CodecFactory.zstandardCodec(zstdLevel, false, zstdBufferPool);</span>
+      } else {
+<span class="nc" id="L79">        return CodecFactory.fromString(outputCodec);</span>
+      }
+
+    }
+
+    // No compression.
+<span class="nc" id="L85">    return CodecFactory.nullCodec();</span>
+  }
+
+  /**
+   * Gets the target output stream where the Avro container file should be
+   * written.
+   *
+   * @param context The task attempt context.
+   * @return The target output stream.
+   */
+  protected OutputStream getAvroFileOutputStream(TaskAttemptContext context) throws IOException {
+<span class="nc" id="L96">    Path path = new Path(((FileOutputCommitter) getOutputCommitter(context)).getWorkPath(),</span>
+<span class="nc" id="L97">        getUniqueFile(context, context.getConfiguration().get(&quot;avro.mo.config.namedOutput&quot;, &quot;part&quot;),</span>
+            org.apache.avro.mapred.AvroOutputFormat.EXT));
+<span class="nc" id="L99">    return path.getFileSystem(context.getConfiguration()).create(path);</span>
+  }
+
+  /**
+   * Gets the configured sync interval from the task context.
+   *
+   * @param context The task attempt context.
+   * @return The sync interval to use for the output Avro container file.
+   */
+  protected static int getSyncInterval(TaskAttemptContext context) {
+<span class="nc" id="L109">    return context.getConfiguration().getInt(org.apache.avro.mapred.AvroOutputFormat.SYNC_INTERVAL_KEY,</span>
+        DataFileConstants.DEFAULT_SYNC_INTERVAL);
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

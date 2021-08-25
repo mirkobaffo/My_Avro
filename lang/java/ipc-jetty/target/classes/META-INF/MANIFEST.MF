@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.ipc.jetty
-Bnd-LastModified: 1629729314335
+Bnd-LastModified: 1629812606270
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro inter-process communication components using Je
@@ -26,6 +26,7 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  .0.SNAPSHOT",javax.servlet;version="[4.0,5)",org.eclipse.jetty.server;v
  ersion="[9.4,10)",org.eclipse.jetty.servlet;version="[9.4,10)",org.ecli
  pse.jetty.util.resource;version="[9.4,10)"
+Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro IPC Jetty
 Specification-Vendor: The Apache Software Foundation

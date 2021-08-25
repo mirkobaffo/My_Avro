@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.42">
-<file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/InduceMojo.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/ProtocolMojo.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/SchemaMojo.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/AbstractAvroMojo.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/IDLProtocolMojo.java">
-</file>
 <file name="/Users/mirko/git/My_Avro/lang/java/maven-plugin/target/generated-sources/plugin/org/apache/avro/mojo/HelpMojo.java">
 </file>
 </checkstyle>

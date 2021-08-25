@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro
-Bnd-LastModified: 1629729287828
+Bnd-LastModified: 1629812586172
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro core components
@@ -46,6 +46,7 @@ Import-Package: com.fasterxml.jackson.annotation;version="[2.12,3)",com.
  ommons.compress.compressors.xz;version="[1.21,2)",org.apache.commons.co
  mpress.utils;version="[1.21,2)",org.slf4j;version="[1.7,2)",sun.misc;re
  solution:=optional
+Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro
 Specification-Vendor: The Apache Software Foundation

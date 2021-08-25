@@ -1,4 +1,4 @@
-#Mon Aug 23 16:35:31 CEST 2021
+#Tue Aug 24 15:43:37 CEST 2021
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/hadoop/io/AvroKeyComparator.java=1629714265101
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/AvroKey.java=1629714265102
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/AvroMapper.java=1629714265102
@@ -9,9 +9,9 @@
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapreduce/AvroJob.java=1629714265104
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/tether/TetherData.java=1629714265103
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/DelegatingMapper.java=1629714265103
-/Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/DelegatingInputFormat.java=1629714265103
-/Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/tether/TetherMapRunner.java=1629714265104
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapreduce/AvroSequenceFileInputFormat.java=1629714265105
+/Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/tether/TetherMapRunner.java=1629714265104
+/Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/DelegatingInputFormat.java=1629714265103
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapred/AvroTextOutputFormat.java=1629714265102
 /Users/mirko/git/My_Avro/lang/java/mapred/src/main/java/org/apache/avro/mapreduce/AvroKeyValueRecordWriter.java=1629714265105
 module-resource*?\:/Users/mirko/git/My_Avro/lang/java/mapred/target/checkstyle-suppressions.xml=433238DD281CF848F58FE49C3D0043570CF31F6A

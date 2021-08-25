@@ -1,9 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.42">
-<file name="/Users/mirko/git/My_Avro/lang/java/ipc-netty/src/main/java/org/apache/avro/ipc/netty/NettyTransportCodec.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/ipc-netty/src/main/java/org/apache/avro/ipc/netty/NettyTransceiver.java">
-</file>
-<file name="/Users/mirko/git/My_Avro/lang/java/ipc-netty/src/main/java/org/apache/avro/ipc/netty/NettyServer.java">
-</file>
 </checkstyle>

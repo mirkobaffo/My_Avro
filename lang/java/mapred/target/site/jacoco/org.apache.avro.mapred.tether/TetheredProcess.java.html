@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TetheredProcess.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred.tether</a> &gt; <span class="el_source">TetheredProcess.java</span></div><h1>TetheredProcess.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.avro.mapred.tether;
+
+import java.io.IOException;
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.TaskAttemptID;
+import org.apache.hadoop.mapred.TaskLog;
+import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.FileUtil;
+
+import org.apache.avro.ipc.Transceiver;
+import org.apache.avro.ipc.Server;
+import org.apache.avro.ipc.SaslSocketServer;
+import org.apache.avro.ipc.SaslSocketTransceiver;
+import org.apache.avro.ipc.specific.SpecificRequestor;
+import org.apache.avro.ipc.specific.SpecificResponder;
+import org.apache.avro.ipc.jetty.HttpServer;
+import org.apache.avro.ipc.HttpTransceiver;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+class TetheredProcess {
+
+<span class="nc" id="L55">  static final Logger LOG = LoggerFactory.getLogger(TetheredProcess.class);</span>
+
+  private JobConf job;
+
+  TetherOutputService outputService;
+  Server outputServer;
+  Process subprocess;
+  Transceiver clientTransceiver;
+  InputProtocol inputClient;
+
+  /**
+   * Enumeration defines which transport protocol to use to communicate between
+   * the map/reduce java daemons and the tethered proce
+   */
+<span class="nc" id="L69">  public enum Protocol {</span>
+<span class="nc" id="L70">    HTTP, SASL, NONE</span>
+  };
+
+  // which protocol we are using
+  Protocol proto;
+
+  public TetheredProcess(JobConf job, OutputCollector&lt;TetherData, NullWritable&gt; collector, Reporter reporter)
+<span class="nc" id="L77">      throws Exception {</span>
+    try {
+      // start server
+<span class="nc" id="L80">      this.outputService = new TetherOutputService(collector, reporter);</span>
+
+<span class="nc" id="L82">      proto = TetherJob.getProtocol(job);</span>
+
+      InetSocketAddress iaddress;
+<span class="nc bnc" id="L85" title="All 3 branches missed.">      switch (proto) {</span>
+      case SASL:
+<span class="nc" id="L87">        iaddress = new InetSocketAddress(0);</span>
+<span class="nc" id="L88">        this.outputServer = new SaslSocketServer(new SpecificResponder(OutputProtocol.class, outputService), iaddress);</span>
+<span class="nc" id="L89">        break;</span>
+      case HTTP:
+<span class="nc" id="L91">        iaddress = new InetSocketAddress(0);</span>
+        // set it up for http
+<span class="nc" id="L93">        this.outputServer = new HttpServer(new SpecificResponder(OutputProtocol.class, outputService),</span>
+<span class="nc" id="L94">            iaddress.getPort());</span>
+<span class="nc" id="L95">        break;</span>
+      case NONE:
+      default:
+<span class="nc" id="L98">        throw new RuntimeException(&quot;No transport protocol was specified in the job configuration&quot;);</span>
+      }
+
+<span class="nc" id="L101">      outputServer.start();</span>
+
+      // start sub-process, connecting back to server
+<span class="nc" id="L104">      this.subprocess = startSubprocess(job);</span>
+
+      // check if the process has exited -- is there a better way to do this?
+<span class="nc" id="L107">      boolean hasexited = false;</span>
+      try {
+        // exitValue throws an exception if process hasn't exited
+<span class="nc" id="L110">        this.subprocess.exitValue();</span>
+<span class="nc" id="L111">        hasexited = true;</span>
+<span class="nc" id="L112">      } catch (IllegalThreadStateException e) {</span>
+<span class="nc" id="L113">      }</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">      if (hasexited) {</span>
+<span class="nc" id="L115">        LOG.error(&quot;Could not start subprocess&quot;);</span>
+<span class="nc" id="L116">        throw new RuntimeException(&quot;Could not start subprocess&quot;);</span>
+      }
+      // open client, connecting to sub-process
+<span class="nc bnc" id="L119" title="All 3 branches missed.">      switch (proto) {</span>
+      case SASL:
+<span class="nc" id="L121">        this.clientTransceiver = new SaslSocketTransceiver(new InetSocketAddress(outputService.inputPort()));</span>
+<span class="nc" id="L122">        break;</span>
+      case HTTP:
+<span class="nc" id="L124">        this.clientTransceiver = new HttpTransceiver(new URL(&quot;http://127.0.0.1:&quot; + outputService.inputPort()));</span>
+<span class="nc" id="L125">        break;</span>
+      default:
+<span class="nc" id="L127">        throw new RuntimeException(&quot;Error: code to handle this protocol is not implemented&quot;);</span>
+      }
+
+<span class="nc" id="L130">      this.inputClient = SpecificRequestor.getClient(InputProtocol.class, clientTransceiver);</span>
+
+<span class="nc" id="L132">    } catch (Exception t) {</span>
+<span class="nc" id="L133">      close();</span>
+<span class="nc" id="L134">      throw t;</span>
+<span class="nc" id="L135">    }</span>
+<span class="nc" id="L136">  }</span>
+
+  public void close() {
+<span class="nc bnc" id="L139" title="All 2 branches missed.">    if (clientTransceiver != null)</span>
+      try {
+<span class="nc" id="L141">        clientTransceiver.close();</span>
+<span class="nc" id="L142">      } catch (IOException e) {</span>
+<span class="nc" id="L143">      } // ignore</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">    if (subprocess != null)</span>
+<span class="nc" id="L145">      subprocess.destroy();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">    if (outputServer != null)</span>
+<span class="nc" id="L147">      outputServer.close();</span>
+<span class="nc" id="L148">  }</span>
+
+  private Process startSubprocess(JobConf job) throws IOException, InterruptedException {
+    // get the executable command
+<span class="nc" id="L152">    List&lt;String&gt; command = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L154">    String executable = &quot;&quot;;</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">    if (job.getBoolean(TetherJob.TETHER_EXEC_CACHED, false)) {</span>
+      // we want to use the cached executable
+<span class="nc" id="L157">      Path[] localFiles = DistributedCache.getLocalCacheFiles(job);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">      if (localFiles == null) { // until MAPREDUCE-476</span>
+<span class="nc" id="L159">        URI[] files = DistributedCache.getCacheFiles(job);</span>
+<span class="nc" id="L160">        localFiles = new Path[] { new Path(files[0].toString()) };</span>
+      }
+<span class="nc" id="L162">      executable = localFiles[0].toString();</span>
+<span class="nc" id="L163">      FileUtil.chmod(executable.toString(), &quot;a+x&quot;);</span>
+<span class="nc" id="L164">    } else {</span>
+<span class="nc" id="L165">      executable = job.get(TetherJob.TETHER_EXEC);</span>
+    }
+
+<span class="nc" id="L168">    command.add(executable);</span>
+
+    // Add the executable arguments. We assume the arguments are separated by
+    // newlines so we split the argument string based on newlines and add each
+    // token to command We need to do it this way because
+    // TaskLog.captureOutAndError will put quote marks around each argument so
+    // if we pass a single string containing all arguments we get quoted
+    // incorrectly
+<span class="nc" id="L176">    String args = job.get(TetherJob.TETHER_EXEC_ARGS);</span>
+
+    // args might be null if TETHER_EXEC_ARGS wasn't set.
+<span class="nc bnc" id="L179" title="All 2 branches missed.">    if (args != null) {</span>
+<span class="nc" id="L180">      String[] aparams = args.split(&quot;\n&quot;);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">      for (int i = 0; i &lt; aparams.length; i++) {</span>
+<span class="nc" id="L182">        aparams[i] = aparams[i].trim();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (aparams[i].length() &gt; 0) {</span>
+<span class="nc" id="L184">          command.add(aparams[i]);</span>
+        }
+      }
+    }
+
+<span class="nc bnc" id="L189" title="All 4 branches missed.">    if (System.getProperty(&quot;hadoop.log.dir&quot;) == null &amp;&amp; System.getenv(&quot;HADOOP_LOG_DIR&quot;) != null)</span>
+<span class="nc" id="L190">      System.setProperty(&quot;hadoop.log.dir&quot;, System.getenv(&quot;HADOOP_LOG_DIR&quot;));</span>
+
+    // wrap the command in a stdout/stderr capture
+<span class="nc" id="L193">    TaskAttemptID taskid = TaskAttemptID.forName(job.get(&quot;mapred.task.id&quot;));</span>
+<span class="nc" id="L194">    File stdout = TaskLog.getTaskLogFile(taskid, false, TaskLog.LogName.STDOUT);</span>
+<span class="nc" id="L195">    File stderr = TaskLog.getTaskLogFile(taskid, false, TaskLog.LogName.STDERR);</span>
+<span class="nc" id="L196">    long logLength = TaskLog.getTaskLogLength(job);</span>
+<span class="nc" id="L197">    command = TaskLog.captureOutAndError(null, command, stdout, stderr, logLength, false);</span>
+<span class="nc" id="L198">    stdout.getParentFile().mkdirs();</span>
+<span class="nc" id="L199">    stderr.getParentFile().mkdirs();</span>
+
+    // add output server's port to env
+<span class="nc" id="L202">    Map&lt;String, String&gt; env = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L203">    env.put(&quot;AVRO_TETHER_OUTPUT_PORT&quot;, Integer.toString(outputServer.getPort()));</span>
+
+    // add an environment variable to specify what protocol to use for communication
+<span class="nc" id="L206">    env.put(&quot;AVRO_TETHER_PROTOCOL&quot;, job.get(TetherJob.TETHER_PROTOCOL));</span>
+
+    // print an info message about the command
+<span class="nc" id="L209">    String imsg = &quot;&quot;;</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">    for (String s : command) {</span>
+<span class="nc" id="L211">      imsg = s + &quot; &quot;;</span>
+<span class="nc" id="L212">    }</span>
+<span class="nc" id="L213">    LOG.info(&quot;TetheredProcess.startSubprocess: command: &quot; + imsg);</span>
+<span class="nc" id="L214">    LOG.info(&quot;Tetheredprocess.startSubprocess: stdout logged to: &quot; + stdout.toString());</span>
+<span class="nc" id="L215">    LOG.info(&quot;Tetheredprocess.startSubprocess: stderr logged to: &quot; + stderr.toString());</span>
+
+    // start child process
+<span class="nc" id="L218">    ProcessBuilder builder = new ProcessBuilder(command);</span>
+
+<span class="nc" id="L220">    builder.environment().putAll(env);</span>
+<span class="nc" id="L221">    return builder.start();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

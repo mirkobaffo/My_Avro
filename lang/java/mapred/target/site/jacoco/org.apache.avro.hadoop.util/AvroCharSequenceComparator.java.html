@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroCharSequenceComparator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.hadoop.util</a> &gt; <span class="el_source">AvroCharSequenceComparator.java</span></div><h1>AvroCharSequenceComparator.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.hadoop.util;
+
+import java.util.Comparator;
+
+/**
+ * Compares Avro string data (data with schema &lt;i&gt;&quot;string&quot;&lt;/i&gt;).
+ *
+ * &lt;p&gt;
+ * The only case where comparing Avro objects does not work using their natural
+ * order is when the schema is &lt;i&gt;&quot;string&quot;&lt;/i&gt;. The Avro string schema maps to
+ * the Java &lt;code&gt;CharSequence&lt;/code&gt; interface, which does not define
+ * &lt;code&gt;equals&lt;/code&gt;, &lt;code&gt;hashCode&lt;/code&gt;, or &lt;code&gt;compareTo&lt;/code&gt;.
+ * &lt;/p&gt;
+ *
+ * &lt;p&gt;
+ * Using this comparator enables comparisons between &lt;code&gt;String&lt;/code&gt; and
+ * &lt;code&gt;Utf8&lt;/code&gt; objects that are both valid when working with Avro strings.
+ * &lt;/p&gt;
+ *
+ * @param &lt;T&gt; The type of object to compare.
+ */
+<span class="nc" id="L40">public class AvroCharSequenceComparator&lt;T&gt; implements Comparator&lt;T&gt; {</span>
+  /** A singleton instance. */
+<span class="nc" id="L42">  public static final AvroCharSequenceComparator&lt;CharSequence&gt; INSTANCE = new AvroCharSequenceComparator&lt;&gt;();</span>
+
+  /** {@inheritDoc} */
+  @Override
+  public int compare(T o1, T o2) {
+<span class="nc bnc" id="L47" title="All 4 branches missed.">    if (!(o1 instanceof CharSequence) || !(o2 instanceof CharSequence)) {</span>
+<span class="nc" id="L48">      throw new RuntimeException(&quot;Attempted use of AvroCharSequenceComparator on non-CharSequence objects: &quot;</span>
+<span class="nc" id="L49">          + o1.getClass().getName() + &quot; and &quot; + o2.getClass().getName());</span>
+    }
+<span class="nc" id="L51">    return compareCharSequence((CharSequence) o1, (CharSequence) o2);</span>
+  }
+
+  /**
+   * Compares the CharSequences &lt;code&gt;o1&lt;/code&gt; and &lt;code&gt;o2&lt;/code&gt;.
+   *
+   * @param o1 The left charsequence.
+   * @param o2 The right charsequence.
+   * @return a negative integer, zero, or a positive integer if the first argument
+   *         is less than, equal to, or greater than the second, respectively.
+   */
+  private int compareCharSequence(CharSequence o1, CharSequence o2) {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">    for (int i = 0; i &lt; Math.max(o1.length(), o2.length()); i++) {</span>
+<span class="nc" id="L64">      int charComparison = compareCharacter(o1, o2, i);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">      if (0 != charComparison) {</span>
+<span class="nc" id="L66">        return charComparison;</span>
+      }
+    }
+<span class="nc" id="L69">    return 0;</span>
+  }
+
+  /**
+   * Compares the characters of &lt;code&gt;o1&lt;/code&gt; and &lt;code&gt;o2&lt;/code&gt; at index
+   * &lt;code&gt;index&lt;/code&gt;.
+   *
+   * @param o1    The left charsequence.
+   * @param o2    The right charsequence.
+   * @param index The zero-based index into the charsequences to compare.
+   * @return a negative integer, zero, or a positive integer if the first argument
+   *         is less than, equal to, or greater than the second, respectively.
+   */
+  private int compareCharacter(CharSequence o1, CharSequence o2, int index) {
+<span class="nc bnc" id="L83" title="All 4 branches missed.">    if (index &lt; o1.length() &amp;&amp; index &lt; o2.length()) {</span>
+<span class="nc" id="L84">      return Character.compare(o1.charAt(index), o2.charAt(index));</span>
+    }
+<span class="nc bnc" id="L86" title="All 4 branches missed.">    if (index &gt;= o1.length() &amp;&amp; index &gt;= o2.length()) {</span>
+<span class="nc" id="L87">      return 0;</span>
+    }
+<span class="nc" id="L89">    return o1.length() - o2.length();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

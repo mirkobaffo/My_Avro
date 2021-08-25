@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroKeyComparator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.hadoop.io</a> &gt; <span class="el_source">AvroKeyComparator.java</span></div><h1>AvroKeyComparator.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.hadoop.io;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.io.BinaryData;
+import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapreduce.AvroJob;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.io.RawComparator;
+
+/**
+ * The {@link org.apache.hadoop.io.RawComparator} used by jobs configured with
+ * {@link org.apache.avro.mapreduce.AvroJob}.
+ *
+ * &lt;p&gt;
+ * Compares AvroKeys output from the map phase for sorting.
+ * &lt;/p&gt;
+ */
+<span class="nc" id="L38">public class AvroKeyComparator&lt;T&gt; extends Configured implements RawComparator&lt;AvroKey&lt;T&gt;&gt; {</span>
+  /** The schema of the Avro data in the key to compare. */
+  private Schema mSchema;
+  private GenericData mDataModel;
+
+  /** {@inheritDoc} */
+  @Override
+  public void setConf(Configuration conf) {
+<span class="nc" id="L46">    super.setConf(conf);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    if (null != conf) {</span>
+      // The MapReduce framework will be using this comparator to sort AvroKey objects
+      // output from the map phase, so use the schema defined for the map output key
+      // and the data model non-raw compare() implementation.
+<span class="nc" id="L51">      mSchema = AvroJob.getMapOutputKeySchema(conf);</span>
+<span class="nc" id="L52">      mDataModel = AvroSerialization.createDataModel(conf);</span>
+    }
+<span class="nc" id="L54">  }</span>
+
+  /** {@inheritDoc} */
+  @Override
+  public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
+<span class="nc" id="L59">    return BinaryData.compare(b1, s1, b2, s2, mSchema);</span>
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int compare(AvroKey&lt;T&gt; x, AvroKey&lt;T&gt; y) {
+<span class="nc" id="L65">    return mDataModel.compare(x.datum(), y.datum(), mSchema);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

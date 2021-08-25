@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroKeyValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.hadoop.io</a> &gt; <span class="el_source">AvroKeyValue.java</span></div><h1>AvroKeyValue.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.hadoop.io;
+
+import java.util.Arrays;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericRecord;
+
+/**
+ * A helper object for working with the Avro generic records that are used to
+ * store key/value pairs in an Avro container file.
+ *
+ * @param &lt;K&gt; The java type for the key.
+ * @param &lt;V&gt; The java type for the value.
+ */
+public class AvroKeyValue&lt;K, V&gt; {
+  /** The name of the key value pair generic record. */
+  public static final String KEY_VALUE_PAIR_RECORD_NAME = &quot;KeyValuePair&quot;;
+
+  /** The namespace of the key value pair generic record. */
+  public static final String KEY_VALUE_PAIR_RECORD_NAMESPACE = &quot;org.apache.avro.mapreduce&quot;;
+
+  /** The name of the generic record field containing the key. */
+  public static final String KEY_FIELD = &quot;key&quot;;
+
+  /** The name of the generic record field containing the value. */
+  public static final String VALUE_FIELD = &quot;value&quot;;
+
+  /** The key/value generic record wrapped by this class. */
+  private final GenericRecord mKeyValueRecord;
+
+  /**
+   * Wraps a GenericRecord that is a key value pair.
+   */
+<span class="nc" id="L52">  public AvroKeyValue(GenericRecord keyValueRecord) {</span>
+<span class="nc" id="L53">    mKeyValueRecord = keyValueRecord;</span>
+<span class="nc" id="L54">  }</span>
+
+  /**
+   * Gets the wrapped key/value GenericRecord.
+   *
+   * @return The key/value Avro generic record.
+   */
+  public GenericRecord get() {
+<span class="nc" id="L62">    return mKeyValueRecord;</span>
+  }
+
+  /**
+   * Read the key.
+   *
+   * @return The key from the key/value generic record.
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public K getKey() {
+<span class="nc" id="L72">    return (K) mKeyValueRecord.get(KEY_FIELD);</span>
+  }
+
+  /**
+   * Read the value.
+   *
+   * @return The value from the key/value generic record.
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public V getValue() {
+<span class="nc" id="L82">    return (V) mKeyValueRecord.get(VALUE_FIELD);</span>
+  }
+
+  /**
+   * Sets the key.
+   *
+   * @param key The key.
+   */
+  public void setKey(K key) {
+<span class="nc" id="L91">    mKeyValueRecord.put(KEY_FIELD, key);</span>
+<span class="nc" id="L92">  }</span>
+
+  /**
+   * Sets the value.
+   *
+   * @param value The value.
+   */
+  public void setValue(V value) {
+<span class="nc" id="L100">    mKeyValueRecord.put(VALUE_FIELD, value);</span>
+<span class="nc" id="L101">  }</span>
+
+  /**
+   * Creates a KeyValuePair generic record schema.
+   *
+   * @return A schema for a generic record with two fields: 'key' and 'value'.
+   */
+  public static Schema getSchema(Schema keySchema, Schema valueSchema) {
+<span class="nc" id="L109">    Schema schema = Schema.createRecord(KEY_VALUE_PAIR_RECORD_NAME, &quot;A key/value pair&quot;, KEY_VALUE_PAIR_RECORD_NAMESPACE,</span>
+        false);
+<span class="nc" id="L111">    schema.setFields(Arrays.asList(new Schema.Field(KEY_FIELD, keySchema, &quot;The key&quot;, null),</span>
+        new Schema.Field(VALUE_FIELD, valueSchema, &quot;The value&quot;, null)));
+<span class="nc" id="L113">    return schema;</span>
+  }
+
+  /**
+   * A wrapper for iterators over GenericRecords that are known to be KeyValue
+   * records.
+   *
+   * @param &lt;K&gt; The key type.
+   * @param &lt;V&gt; The value type.
+   */
+  public static class Iterator&lt;K, V&gt; implements java.util.Iterator&lt;AvroKeyValue&lt;K, V&gt;&gt; {
+    /** The wrapped iterator. */
+    private final java.util.Iterator&lt;? extends GenericRecord&gt; mGenericIterator;
+
+    /**
+     * Constructs an iterator over key-value map entries out of a generic iterator.
+     *
+     * @param genericIterator An iterator over some generic record entries.
+     */
+<span class="nc" id="L132">    public Iterator(java.util.Iterator&lt;? extends GenericRecord&gt; genericIterator) {</span>
+<span class="nc" id="L133">      mGenericIterator = genericIterator;</span>
+<span class="nc" id="L134">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean hasNext() {
+<span class="nc" id="L139">      return mGenericIterator.hasNext();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public AvroKeyValue&lt;K, V&gt; next() {
+<span class="nc" id="L145">      GenericRecord genericRecord = mGenericIterator.next();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">      if (null == genericRecord) {</span>
+<span class="nc" id="L147">        return null;</span>
+      }
+<span class="nc" id="L149">      return new AvroKeyValue&lt;&gt;(genericRecord);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void remove() {
+<span class="nc" id="L155">      mGenericIterator.remove();</span>
+<span class="nc" id="L156">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

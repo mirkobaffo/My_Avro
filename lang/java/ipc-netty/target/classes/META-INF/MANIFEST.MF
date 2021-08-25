@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.avro.ipc.netty
-Bnd-LastModified: 1629729319059
+Bnd-LastModified: 1629812606987
 Build-Jdk: 11.0.11
 Built-By: mirko
 Bundle-Description: Avro inter-process communication components
@@ -28,6 +28,7 @@ Import-Package: org.apache.avro;version="1.11.0.SNAPSHOT",org.apache.avr
  1,5)",io.netty.channel.socket.nio;version="[4.1,5)",io.netty.handler.co
  dec;version="[4.1,5)",io.netty.util.concurrent;version="[4.1,5)",org.sl
  f4j;version="[1.7,2)"
+Originally-Created-By: Apache Maven Bundle Plugin
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Specification-Title: Apache Avro IPC Netty
 Specification-Vendor: The Apache Software Foundation
