@@ -65,12 +65,12 @@
         <!--<version>LATEST</version>-->
         <configuration>
           <targetClasses>
-            <param>org.apache.avro.mapred.AvroWrapper</param>
-            <param>org.apache.avro.mapred.FsInput</param>
+            <param>java.org.apache.avro.mapred.AvroWrapper</param>
+            <param>java.org.apache.avro.mapred.FsInput</param>
           </targetClasses>
           <targetTests>
-            <param>org.apache.avro.mapred.TestAvroWrapper</param>
-            <param>org.apache.avro.mapred.FsInputTest</param>
+            <param>java.org.apache.avro.mapred.TestAvroWrapper</param>
+            <param>java.org.apache.avro.mapred.FsInputTest</param>
           </targetTests>
         </configuration>
       </plugin>
