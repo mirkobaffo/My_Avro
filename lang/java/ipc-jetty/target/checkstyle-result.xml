@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc-jetty/src/main/java/org/apache/avro/ipc/jetty/StatsServer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc-jetty/src/main/java/org/apache/avro/ipc/jetty/StaticServlet.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc-jetty/src/main/java/org/apache/avro/ipc/jetty/HttpServer.java">
+</file>
+</checkstyle>

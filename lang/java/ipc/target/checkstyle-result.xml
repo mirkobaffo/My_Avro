@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/specific/SpecificResponder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/specific/SpecificRequestor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/RPCContext.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/reflect/ReflectResponder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/reflect/ReflectRequestor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/DatagramServer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/HttpTransceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/SaslSocketServer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/DatagramTransceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Callback.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/LocalTransceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/SaslSocketTransceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Transceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/RPCPlugin.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/SocketTransceiver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/generic/GenericResponder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/generic/GenericRequestor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/ResponderServlet.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Server.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Requestor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/SocketServer.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/CallFuture.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/FloatHistogram.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/Stopwatch.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/StatsPlugin.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/StatsServlet.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/IntegerHistogram.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/stats/Histogram.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Responder.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/src/main/java/org/apache/avro/ipc/Ipc.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/target/generated-sources/java/org/apache/avro/ipc/MD5.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/target/generated-sources/java/org/apache/avro/ipc/HandshakeMatch.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/target/generated-sources/java/org/apache/avro/ipc/HandshakeResponse.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/ipc/target/generated-sources/java/org/apache/avro/ipc/HandshakeRequest.java">
+</file>
+</checkstyle>

@@ -1,0 +1,9 @@
+#Mon Aug 30 12:58:31 CEST 2021
+module-resource*?\:/Users/mirko/git/My_Avro/lang/java/maven-plugin/target/checkstyle-suppressions.xml=433238DD281CF848F58FE49C3D0043570CF31F6A
+configuration*?=808A18FC538F5E1A3E4400B9CE343E2ED03D45AC
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/InduceMojo.java=1629714265124
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/target/generated-sources/plugin/org/apache/avro/mojo/HelpMojo.java=1630321106710
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/SchemaMojo.java=1629714265124
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/AbstractAvroMojo.java=1629714265124
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/IDLProtocolMojo.java=1629714265124
+/Users/mirko/git/My_Avro/lang/java/maven-plugin/src/main/java/org/apache/avro/mojo/ProtocolMojo.java=1629714265124

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroKeyOutputFormat.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapreduce</a> &gt; <span class="el_source">AvroKeyOutputFormat.java</span></div><h1>AvroKeyOutputFormat.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.mapreduce;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.apache.avro.Schema;
+import org.apache.avro.file.CodecFactory;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.hadoop.io.AvroSerialization;
+import org.apache.avro.mapred.AvroKey;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.mapreduce.RecordWriter;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+/**
+ * FileOutputFormat for writing Avro container files.
+ *
+ * &lt;p&gt;
+ * Since Avro container files only contain records (not key/value pairs), this
+ * output format ignores the value.
+ * &lt;/p&gt;
+ *
+ * @param &lt;T&gt; The (java) type of the Avro data to write.
+ */
+public class AvroKeyOutputFormat&lt;T&gt; extends AvroOutputFormatBase&lt;AvroKey&lt;T&gt;, NullWritable&gt; {
+  /** A factory for creating record writers. */
+  private final RecordWriterFactory mRecordWriterFactory;
+
+  /**
+   * Constructor.
+   */
+  public AvroKeyOutputFormat() {
+<span class="nc" id="L52">    this(new RecordWriterFactory());</span>
+<span class="nc" id="L53">  }</span>
+
+  /**
+   * Constructor.
+   *
+   * @param recordWriterFactory A factory for creating record writers.
+   */
+<span class="nc" id="L60">  protected AvroKeyOutputFormat(RecordWriterFactory recordWriterFactory) {</span>
+<span class="nc" id="L61">    mRecordWriterFactory = recordWriterFactory;</span>
+<span class="nc" id="L62">  }</span>
+
+  /**
+   * A factory for creating record writers.
+   *
+   * @param &lt;T&gt; The java type of the avro record to write.
+   */
+<span class="nc" id="L69">  protected static class RecordWriterFactory&lt;T&gt; {</span>
+    /**
+     * Creates a new record writer instance.
+     *
+     * @param writerSchema     The writer schema for the records to write.
+     * @param compressionCodec The compression type for the writer file.
+     * @param outputStream     The target output stream for the records.
+     * @param syncInterval     The sync interval for the writer file.
+     */
+    protected RecordWriter&lt;AvroKey&lt;T&gt;, NullWritable&gt; create(Schema writerSchema, GenericData dataModel,
+        CodecFactory compressionCodec, OutputStream outputStream, int syncInterval) throws IOException {
+<span class="nc" id="L80">      return new AvroKeyRecordWriter&lt;&gt;(writerSchema, dataModel, compressionCodec, outputStream, syncInterval);</span>
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public RecordWriter&lt;AvroKey&lt;T&gt;, NullWritable&gt; getRecordWriter(TaskAttemptContext context) throws IOException {
+<span class="nc" id="L88">    Configuration conf = context.getConfiguration();</span>
+    // Get the writer schema.
+<span class="nc" id="L90">    Schema writerSchema = AvroJob.getOutputKeySchema(conf);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">    boolean isMapOnly = context.getNumReduceTasks() == 0;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">    if (isMapOnly) {</span>
+<span class="nc" id="L93">      Schema mapOutputSchema = AvroJob.getMapOutputKeySchema(conf);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">      if (mapOutputSchema != null) {</span>
+<span class="nc" id="L95">        writerSchema = mapOutputSchema;</span>
+      }
+    }
+<span class="nc bnc" id="L98" title="All 2 branches missed.">    if (null == writerSchema) {</span>
+<span class="nc" id="L99">      throw new IOException(&quot;AvroKeyOutputFormat requires an output schema. Use AvroJob.setOutputKeySchema().&quot;);</span>
+    }
+
+<span class="nc" id="L102">    GenericData dataModel = AvroSerialization.createDataModel(conf);</span>
+
+<span class="nc" id="L104">    OutputStream out = getAvroFileOutputStream(context);</span>
+    try {
+<span class="nc" id="L106">      return mRecordWriterFactory.create(writerSchema, dataModel, getCompressionCodec(context), out,</span>
+<span class="nc" id="L107">          getSyncInterval(context));</span>
+<span class="nc" id="L108">    } catch (IOException e) {</span>
+<span class="nc" id="L109">      out.close();</span>
+<span class="nc" id="L110">      throw e;</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

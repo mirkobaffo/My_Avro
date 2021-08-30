@@ -1,0 +1,19 @@
+#Mon Aug 30 12:58:24 CEST 2021
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/ResolvingVisitor.java=1629714265035
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitor.java=1629714265036
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/JavaCharStream.java=1630321097336
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/Token.java=1630321097337
+configuration*?=CA58B5DD3B6518FDEE2B9F17A555C0942244A222
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/IdlConstants.java=1630321097338
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/SpecificCompiler.java=1629714265036
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/SchemaResolver.java=1629714265035
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/TokenMgrError.java=1630321097336
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/IdlTokenManager.java=1630321097337
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/Schemas.java=1629714265036
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitorAction.java=1629714265036
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/ParseException.java=1630321097337
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/CloningVisitor.java=1629714265036
+module-resource*?\:/Users/mirko/git/My_Avro/lang/java/compiler/target/checkstyle-suppressions.xml=433238DD281CF848F58FE49C3D0043570CF31F6A
+/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/Idl.java=1630321097337
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/SchemaTask.java=1629714265036
+/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/ProtocolTask.java=1629714265036

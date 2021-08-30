@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcClient.ServiceInvocationHandler.CallbackToResponseStreamObserverAdpater,29,0,2,0,10,0,5,0,4,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroResponseMarshaller,87,0,6,0,19,0,7,0,4,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroRequestMarshaller.AvroRequestInputStream,69,0,4,0,17,0,4,0,2,0
+Apache Avro gRPC,org.apache.avro.grpc,ServiceDescriptor,80,0,0,0,14,0,7,0,7,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcServer.OneWayUnaryMethodHandler,43,0,4,0,13,0,5,0,3,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroInputStream.CountingOutputStream,44,0,0,0,15,0,6,0,6,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroRequestMarshaller,81,0,2,0,19,0,5,0,4,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroResponseMarshaller.AvroResponseInputStream,128,0,6,0,34,0,6,0,3,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroInputStream,38,0,2,0,9,0,6,0,5,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcClient,30,0,0,0,5,0,2,0,2,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcUtils,85,0,6,0,21,0,7,0,4,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcServer,66,0,6,0,14,0,4,0,1,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcServer.UnaryMethodHandler,39,0,0,0,16,0,4,0,4,0
+Apache Avro gRPC,org.apache.avro.grpc,AvroGrpcClient.ServiceInvocationHandler,148,0,12,0,32,0,11,0,5,0

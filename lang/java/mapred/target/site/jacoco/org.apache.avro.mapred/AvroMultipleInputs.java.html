@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroMultipleInputs.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred</a> &gt; <span class="el_source">AvroMultipleInputs.java</span></div><h1>AvroMultipleInputs.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.avro.mapred;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.avro.Schema;
+import org.apache.avro.SchemaParseException;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapred.JobConf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * This class supports Avro-MapReduce jobs that have multiple input paths with a
+ * different {@link Schema} and {@link AvroMapper} for each path.
+ *
+ * &lt;p&gt;
+ * Usage:
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * &lt;strong&gt;Case 1: (ReflectData based inputs)&lt;/strong&gt;
+ * &lt;/p&gt;
+ *
+ * &lt;pre&gt;
+ * // Enable ReflectData usage across job.
+ * AvroJob.setReflect(job);
+ *
+ * Schema type1Schema = ReflectData.get().getSchema(Type1Record.class)
+ * AvroMultipleInputs.addInputPath(job, inputPath1, type1Schema, Type1AvroMapper.class);
+ * &lt;/pre&gt;
+ *
+ * Where Type1AvroMapper would be implemented as
+ *
+ * &lt;pre&gt;
+ *  class Type1AvroMapper extends AvroMapper&amp;lt;Type1Record, Pair&amp;lt;ComparingKeyRecord, CommonValueRecord&amp;gt;&amp;gt;
+ * &lt;/pre&gt;
+ *
+ * &lt;pre&gt;
+ * Schema type2Schema = ReflectData.get().getSchema(Type2Record.class)
+ * AvroMultipleInputs.addInputPath(job, inputPath2, type2Schema, Type2AvroMapper.class);
+ * &lt;/pre&gt;
+ *
+ * Where Type2AvroMapper would be implemented as
+ *
+ * &lt;pre&gt;
+ *  class Type2AvroMapper extends AvroMapper&amp;lt;Type2Record, Pair&amp;lt;ComparingKeyRecord, CommonValueRecord&amp;gt;&amp;gt;
+ * &lt;/pre&gt;
+ *
+ * &lt;p&gt;
+ * &lt;strong&gt;Case 2: (SpecificData based inputs)&lt;/strong&gt;
+ * &lt;/p&gt;
+ *
+ * &lt;pre&gt;
+ * Schema type1Schema = Type1Record.SCHEMA$;
+ * AvroMultipleInputs.addInputPath(job, inputPath1, type1Schema, Type1AvroMapper.class);
+ * &lt;/pre&gt;
+ *
+ * Where Type1AvroMapper would be implemented as
+ *
+ * &lt;pre&gt;
+ *  class Type1AvroMapper extends AvroMapper&amp;lt;Type1Record, Pair&amp;lt;ComparingKeyRecord, CommonValueRecord&amp;gt;&amp;gt;
+ * &lt;/pre&gt;
+ *
+ * &lt;pre&gt;
+ * Schema type2Schema = Type2Record.SCHEMA$;
+ * AvroMultipleInputs.addInputPath(job, inputPath2, type2Schema, Type2AvroMapper.class);
+ * &lt;/pre&gt;
+ *
+ * Where Type2AvroMapper would be implemented as
+ *
+ * &lt;pre&gt;
+ *  class Type2AvroMapper extends AvroMapper&amp;lt;Type2Record, Pair&amp;lt;ComparingKeyRecord, CommonValueRecord&amp;gt;&amp;gt;
+ * &lt;/pre&gt;
+ *
+ * &lt;p&gt;
+ * &lt;strong&gt;Note on InputFormat:&lt;/strong&gt; The InputFormat used will always be
+ * {@link AvroInputFormat} when using this class.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * &lt;strong&gt;Note on collector outputs:&lt;/strong&gt; When using this class, you will
+ * need to ensure that the mapper implementations involved must all emit the
+ * same Key type and Value record types, as set by
+ * {@link AvroJob#setOutputSchema(JobConf, Schema)} or
+ * {@link AvroJob#setMapOutputSchema(JobConf, Schema)}.
+ * &lt;/p&gt;
+ */
+<span class="nc" id="L108">public class AvroMultipleInputs {</span>
+
+<span class="nc" id="L110">  private static final Logger LOG = LoggerFactory.getLogger(AvroMultipleInputs.class);</span>
+
+  private static final String SCHEMA_KEY = &quot;avro.mapreduce.input.multipleinputs.dir.schemas&quot;;
+  private static final String MAPPERS_KEY = &quot;avro.mapreduce.input.multipleinputs.dir.mappers&quot;;
+
+  /**
+   * Add a {@link Path} with a custom {@link Schema} to the list of inputs for the
+   * map-reduce job.
+   *
+   * @param conf        The configuration of the job
+   * @param path        {@link Path} to be added to the list of inputs for the job
+   * @param inputSchema {@link Schema} class to use for this path
+   */
+  private static void addInputPath(JobConf conf, Path path, Schema inputSchema) {
+
+<span class="nc" id="L125">    String schemaMapping = path.toString() + &quot;;&quot; + toBase64(inputSchema.toString());</span>
+
+<span class="nc" id="L127">    String schemas = conf.get(SCHEMA_KEY);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">    conf.set(SCHEMA_KEY, schemas == null ? schemaMapping : schemas + &quot;,&quot; + schemaMapping);</span>
+
+<span class="nc" id="L130">    conf.setInputFormat(DelegatingInputFormat.class);</span>
+<span class="nc" id="L131">  }</span>
+
+  /**
+   * Add a {@link Path} with a custom {@link Schema} and {@link AvroMapper} to the
+   * list of inputs for the map-reduce job.
+   *
+   * @param conf        The configuration of the job
+   * @param path        {@link Path} to be added to the list of inputs for the job
+   * @param inputSchema {@link Schema} to use for this path
+   * @param mapperClass {@link AvroMapper} class to use for this path
+   */
+  public static void addInputPath(JobConf conf, Path path, Class&lt;? extends AvroMapper&gt; mapperClass,
+      Schema inputSchema) {
+
+<span class="nc" id="L145">    addInputPath(conf, path, inputSchema);</span>
+
+<span class="nc" id="L147">    String mapperMapping = path.toString() + &quot;;&quot; + mapperClass.getName();</span>
+<span class="nc" id="L148">    LOG.info(mapperMapping);</span>
+<span class="nc" id="L149">    String mappers = conf.get(MAPPERS_KEY);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">    conf.set(MAPPERS_KEY, mappers == null ? mapperMapping : mappers + &quot;,&quot; + mapperMapping);</span>
+
+<span class="nc" id="L152">    conf.setMapperClass(DelegatingMapper.class);</span>
+<span class="nc" id="L153">  }</span>
+
+  /**
+   * Retrieves a map of {@link Path}s to the {@link AvroMapper} class that should
+   * be used for them.
+   *
+   * @param conf The configuration of the job
+   * @see #addInputPath(JobConf, Path, Class, Schema)
+   * @return A map of paths-to-mappers for the job
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  static Map&lt;Path, Class&lt;? extends AvroMapper&gt;&gt; getMapperTypeMap(JobConf conf) {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">    if (conf.get(MAPPERS_KEY) == null) {</span>
+<span class="nc" id="L166">      return Collections.emptyMap();</span>
+    }
+<span class="nc" id="L168">    Map&lt;Path, Class&lt;? extends AvroMapper&gt;&gt; m = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L169">    String[] pathMappings = conf.get(MAPPERS_KEY).split(&quot;,&quot;);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">    for (String pathMapping : pathMappings) {</span>
+<span class="nc" id="L171">      String[] split = pathMapping.split(&quot;;&quot;);</span>
+      Class&lt;? extends AvroMapper&gt; mapClass;
+      try {
+<span class="nc" id="L174">        mapClass = (Class&lt;? extends AvroMapper&gt;) conf.getClassByName(split[1]);</span>
+<span class="nc" id="L175">      } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L176">        throw new RuntimeException(e);</span>
+<span class="nc" id="L177">      }</span>
+<span class="nc" id="L178">      m.put(new Path(split[0]), mapClass);</span>
+    }
+<span class="nc" id="L180">    return m;</span>
+  }
+
+  /**
+   * Retrieves a map of {@link Path}s to the {@link Schema} that should be used
+   * for them.
+   *
+   * @param conf The configuration of the job
+   * @see #addInputPath(JobConf, Path, Class, Schema)
+   * @return A map of paths to schemas for the job
+   */
+  static Map&lt;Path, Schema&gt; getInputSchemaMap(JobConf conf) {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">    if (conf.get(SCHEMA_KEY) == null) {</span>
+<span class="nc" id="L193">      return Collections.emptyMap();</span>
+    }
+<span class="nc" id="L195">    Map&lt;Path, Schema&gt; m = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L196">    String[] schemaMappings = conf.get(SCHEMA_KEY).split(&quot;,&quot;);</span>
+<span class="nc" id="L197">    Schema.Parser schemaParser = new Schema.Parser();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">    for (String schemaMapping : schemaMappings) {</span>
+<span class="nc" id="L199">      String[] split = schemaMapping.split(&quot;;&quot;);</span>
+<span class="nc" id="L200">      String schemaString = fromBase64(split[1]);</span>
+      Schema inputSchema;
+      try {
+<span class="nc" id="L203">        inputSchema = schemaParser.parse(schemaString);</span>
+<span class="nc" id="L204">      } catch (SchemaParseException e) {</span>
+<span class="nc" id="L205">        throw new RuntimeException(e);</span>
+<span class="nc" id="L206">      }</span>
+<span class="nc" id="L207">      m.put(new Path(split[0]), inputSchema);</span>
+    }
+<span class="nc" id="L209">    return m;</span>
+  }
+
+  private static String toBase64(String rawString) {
+<span class="nc" id="L213">    final byte[] buf = rawString.getBytes(UTF_8);</span>
+<span class="nc" id="L214">    return new String(Base64.getMimeEncoder().encode(buf), UTF_8);</span>
+  }
+
+  private static String fromBase64(String base64String) {
+<span class="nc" id="L218">    final byte[] buf = base64String.getBytes(UTF_8);</span>
+<span class="nc" id="L219">    return new String(Base64.getMimeDecoder().decode(buf), UTF_8);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

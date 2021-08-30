@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HadoopCombiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapred</a> &gt; <span class="el_source">HadoopCombiner.java</span></div><h1>HadoopCombiner.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.avro.mapred;
+
+import java.io.IOException;
+
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.util.ReflectionUtils;
+
+/**
+ * Bridge between a {@link org.apache.hadoop.mapred.Reducer} and an
+ * {@link AvroReducer} used when combining. When combining, map output pairs
+ * must be split before they're collected.
+ */
+<span class="nc" id="L32">class HadoopCombiner&lt;K, V&gt; extends HadoopReducerBase&lt;K, V, Pair&lt;K, V&gt;, AvroKey&lt;K&gt;, AvroValue&lt;V&gt;&gt; {</span>
+
+  @Override
+  @SuppressWarnings(&quot;unchecked&quot;)
+  protected AvroReducer&lt;K, V, Pair&lt;K, V&gt;&gt; getReducer(JobConf conf) {
+<span class="nc" id="L37">    return ReflectionUtils.newInstance(conf.getClass(AvroJob.COMBINER, AvroReducer.class, AvroReducer.class), conf);</span>
+  }
+
+  private class PairCollector extends AvroCollector&lt;Pair&lt;K, V&gt;&gt; {
+<span class="nc" id="L41">    private final AvroKey&lt;K&gt; keyWrapper = new AvroKey&lt;&gt;(null);</span>
+<span class="nc" id="L42">    private final AvroValue&lt;V&gt; valueWrapper = new AvroValue&lt;&gt;(null);</span>
+    private OutputCollector&lt;AvroKey&lt;K&gt;, AvroValue&lt;V&gt;&gt; collector;
+
+<span class="nc" id="L45">    public PairCollector(OutputCollector&lt;AvroKey&lt;K&gt;, AvroValue&lt;V&gt;&gt; collector) {</span>
+<span class="nc" id="L46">      this.collector = collector;</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public void collect(Pair&lt;K, V&gt; datum) throws IOException {
+<span class="nc" id="L51">      keyWrapper.datum(datum.key()); // split the Pair</span>
+<span class="nc" id="L52">      valueWrapper.datum(datum.value());</span>
+<span class="nc" id="L53">      collector.collect(keyWrapper, valueWrapper);</span>
+<span class="nc" id="L54">    }</span>
+  }
+
+  @Override
+  protected AvroCollector&lt;Pair&lt;K, V&gt;&gt; getCollector(OutputCollector&lt;AvroKey&lt;K&gt;, AvroValue&lt;V&gt;&gt; collector) {
+<span class="nc" id="L59">    return new PairCollector(collector);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

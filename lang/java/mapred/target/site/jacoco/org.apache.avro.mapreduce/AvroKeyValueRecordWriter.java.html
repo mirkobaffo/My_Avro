@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvroKeyValueRecordWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Apache Avro Mapred API</a> &gt; <a href="index.source.html" class="el_package">org.apache.avro.mapreduce</a> &gt; <span class="el_source">AvroKeyValueRecordWriter.java</span></div><h1>AvroKeyValueRecordWriter.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied.  See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package org.apache.avro.mapreduce;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.apache.avro.Schema;
+import org.apache.avro.file.CodecFactory;
+import org.apache.avro.file.DataFileConstants;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.hadoop.io.AvroDatumConverter;
+import org.apache.avro.hadoop.io.AvroKeyValue;
+import org.apache.hadoop.mapreduce.RecordWriter;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+/**
+ * Writes key/value pairs to an Avro container file.
+ *
+ * &lt;p&gt;
+ * Each entry in the Avro container file will be a generic record with two
+ * fields, named 'key' and 'value'. The input types may be basic Writable
+ * objects like Text or IntWritable, or they may be AvroWrapper subclasses
+ * (AvroKey or AvroValue). Writable objects will be converted to their
+ * corresponding Avro types when written to the generic record key/value pair.
+ * &lt;/p&gt;
+ *
+ * @param &lt;K&gt; The type of key to write.
+ * @param &lt;V&gt; The type of value to write.
+ */
+public class AvroKeyValueRecordWriter&lt;K, V&gt; extends RecordWriter&lt;K, V&gt; implements Syncable {
+  /** A writer for the Avro container file. */
+  private final DataFileWriter&lt;GenericRecord&gt; mAvroFileWriter;
+
+  /**
+   * The writer schema for the generic record entries of the Avro container file.
+   */
+  private final Schema mKeyValuePairSchema;
+
+  /** A reusable Avro generic record for writing key/value pairs to the file. */
+  private final AvroKeyValue&lt;Object, Object&gt; mOutputRecord;
+
+  /** A helper object that converts the input key to an Avro datum. */
+  private final AvroDatumConverter&lt;K, ?&gt; mKeyConverter;
+
+  /** A helper object that converts the input value to an Avro datum. */
+  private final AvroDatumConverter&lt;V, ?&gt; mValueConverter;
+
+  /**
+   * Constructor.
+   *
+   * @param keyConverter     A key to Avro datum converter.
+   * @param valueConverter   A value to Avro datum converter.
+   * @param dataModel        The data model for key and value.
+   * @param compressionCodec A compression codec factory for the Avro container
+   *                         file.
+   * @param outputStream     The output stream to write the Avro container file
+   *                         to.
+   * @param syncInterval     The sync interval for the Avro container file.
+   * @throws IOException If the record writer cannot be opened.
+   */
+  public AvroKeyValueRecordWriter(AvroDatumConverter&lt;K, ?&gt; keyConverter, AvroDatumConverter&lt;V, ?&gt; valueConverter,
+      GenericData dataModel, CodecFactory compressionCodec, OutputStream outputStream, int syncInterval)
+<span class="nc" id="L82">      throws IOException {</span>
+    // Create the generic record schema for the key/value pair.
+<span class="nc" id="L84">    mKeyValuePairSchema = AvroKeyValue.getSchema(keyConverter.getWriterSchema(), valueConverter.getWriterSchema());</span>
+
+    // Create an Avro container file and a writer to it.
+<span class="nc" id="L87">    mAvroFileWriter = new DataFileWriter&lt;GenericRecord&gt;(dataModel.createDatumWriter(mKeyValuePairSchema));</span>
+<span class="nc" id="L88">    mAvroFileWriter.setCodec(compressionCodec);</span>
+<span class="nc" id="L89">    mAvroFileWriter.setSyncInterval(syncInterval);</span>
+<span class="nc" id="L90">    mAvroFileWriter.create(mKeyValuePairSchema, outputStream);</span>
+
+    // Keep a reference to the converters.
+<span class="nc" id="L93">    mKeyConverter = keyConverter;</span>
+<span class="nc" id="L94">    mValueConverter = valueConverter;</span>
+
+    // Create a reusable output record.
+<span class="nc" id="L97">    mOutputRecord = new AvroKeyValue&lt;&gt;(new GenericData.Record(mKeyValuePairSchema));</span>
+<span class="nc" id="L98">  }</span>
+
+  /**
+   * Constructor.
+   *
+   * @param keyConverter     A key to Avro datum converter.
+   * @param valueConverter   A value to Avro datum converter.
+   * @param dataModel        The data model for key and value.
+   * @param compressionCodec A compression codec factory for the Avro container
+   *                         file.
+   * @param outputStream     The output stream to write the Avro container file
+   *                         to.
+   * @throws IOException If the record writer cannot be opened.
+   */
+  public AvroKeyValueRecordWriter(AvroDatumConverter&lt;K, ?&gt; keyConverter, AvroDatumConverter&lt;V, ?&gt; valueConverter,
+      GenericData dataModel, CodecFactory compressionCodec, OutputStream outputStream) throws IOException {
+<span class="nc" id="L114">    this(keyConverter, valueConverter, dataModel, compressionCodec, outputStream,</span>
+        DataFileConstants.DEFAULT_SYNC_INTERVAL);
+<span class="nc" id="L116">  }</span>
+
+  /**
+   * Gets the writer schema for the key/value pair generic record.
+   *
+   * @return The writer schema used for entries of the Avro container file.
+   */
+  public Schema getWriterSchema() {
+<span class="nc" id="L124">    return mKeyValuePairSchema;</span>
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void write(K key, V value) throws IOException {
+<span class="nc" id="L130">    mOutputRecord.setKey(mKeyConverter.convert(key));</span>
+<span class="nc" id="L131">    mOutputRecord.setValue(mValueConverter.convert(value));</span>
+<span class="nc" id="L132">    mAvroFileWriter.append(mOutputRecord.get());</span>
+<span class="nc" id="L133">  }</span>
+
+  /** {@inheritDoc} */
+  @Override
+  public void close(TaskAttemptContext context) throws IOException {
+<span class="nc" id="L138">    mAvroFileWriter.close();</span>
+<span class="nc" id="L139">  }</span>
+
+  /** {@inheritDoc} */
+  @Override
+  public long sync() throws IOException {
+<span class="nc" id="L144">    return mAvroFileWriter.sync();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

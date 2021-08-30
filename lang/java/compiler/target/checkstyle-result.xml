@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.42">
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/ResolvingVisitor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/idl/SchemaResolver.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/SchemaTask.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/ProtocolTask.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/specific/SpecificCompiler.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitorAction.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/Schemas.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/CloningVisitor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/src/main/java/org/apache/avro/compiler/schema/SchemaVisitor.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/JavaCharStream.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/TokenMgrError.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/ParseException.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/IdlTokenManager.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/Idl.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/Token.java">
+</file>
+<file name="/Users/mirko/git/My_Avro/lang/java/compiler/target/generated-sources/javacc/org/apache/avro/compiler/idl/IdlConstants.java">
+</file>
+</checkstyle>
