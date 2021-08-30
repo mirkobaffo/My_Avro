@@ -61,12 +61,6 @@
     <surefire.version>3.0.0-M5</surefire.version>
   </properties>
   <dependencies>
-    <dependency>
-      <groupId>org.pitest</groupId>
-      <artifactId>pitest-maven</artifactId>
-      <version>LATEST</version>
-      <type>maven-plugin</type>
-    </dependency>
 	<dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
