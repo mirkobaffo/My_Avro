@@ -47,7 +47,7 @@ public class TestAvroWrapper {
 	@Parameters 
     public static Collection<Object[]> configure() throws Exception{
         return Arrays.asList(new Object[][]{
-            {"mirko", 8}, {"guglielmo", 99999}
+            {"mirko", 8}, {"guglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmo", 99999}
         });
     } 
     

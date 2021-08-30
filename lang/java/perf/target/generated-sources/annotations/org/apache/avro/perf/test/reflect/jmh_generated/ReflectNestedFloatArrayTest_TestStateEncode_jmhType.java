@@ -1,4 +1,0 @@
-package org.apache.avro.perf.test.reflect.jmh_generated;
-public class ReflectNestedFloatArrayTest_TestStateEncode_jmhType extends ReflectNestedFloatArrayTest_TestStateEncode_jmhType_B3 {
-}
-

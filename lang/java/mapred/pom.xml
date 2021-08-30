@@ -46,7 +46,6 @@
       org.apache.avro.hadoop*;version="${project.version}",
     </osgi.export>
   </properties>
-
   <build>
     <plugins>
       <plugin>
@@ -58,6 +57,21 @@
               <Automatic-Module-Name>org.apache.avro.mapred</Automatic-Module-Name>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <!--<version>LATEST</version>-->
+        <configuration>
+          <targetClasses>
+            <param>org.apache.avro.mapred.AvroWrapper</param>
+            <param>org.apache.avro.mapred.FsInput</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.avro.mapred.TestAvroWrapper</param>
+            <param>org.apache.avro.mapred.FsInputTest</param>
+          </targetTests>
         </configuration>
       </plugin>
       <!-- Allow guava because hadoop brings it as a transitive dependency. -->
@@ -177,8 +191,13 @@
       </plugin>
     </plugins>
   </build>
-
   <dependencies>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-maven</artifactId>
+      <version> 1.5.1 </version>
+      <type>maven-plugin</type>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>avro-ipc</artifactId>
