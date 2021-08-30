@@ -33,6 +33,14 @@
   <description>An org.apache.hadoop.mapred compatible API for using Avro Serialization in Hadoop</description>
   <packaging>bundle</packaging>
 
+<dependencies>
+<dependency>
+<groupId>org.pitest</groupId>
+<artifactId>pitest-maven</artifactId>
+<version> 1.5.1 </version>
+<type>maven-plugin</type>
+</dependency>
+</dependencies>
   <properties>
     <main.basedir>${project.parent.parent.basedir}</main.basedir>
     <osgi.import>
