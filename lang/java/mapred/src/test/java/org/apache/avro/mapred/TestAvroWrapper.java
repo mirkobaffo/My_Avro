@@ -44,9 +44,11 @@ public class TestAvroWrapper {
 	String datumString;
 	Integer datumInt;
 
+
 	@Parameters 
     public static Collection<Object[]> configure() throws Exception{
         return Arrays.asList(new Object[][]{
+        		//Tentativo anche con stringa estremamente lunga
             {"mirko", 8}, {"guglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmoguglielmo", 99999}
         });
     } 
